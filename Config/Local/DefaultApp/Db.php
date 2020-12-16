@@ -27,7 +27,7 @@ class Db
     /**
      * @var string Db Name
      */
-    public $name = 'own_app';
+    public $name = 'npf_project';
     /**
      * @var string Client Side Charset
      */
