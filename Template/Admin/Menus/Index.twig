@@ -1,0 +1,103 @@
+{% extends 'Layout/Main.twig' %}
+
+{% block content %}
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="content-header">
+            <div class="d-flex align-items-center">
+                <div class="mr-auto">
+                    <h3 class="page-title">{{ "Admin Menu" | i18n }}</h3>
+                    <div class="d-inline-block align-items-center">
+                        <nav>
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="{{ basePath }}/"><i
+                                                class="mdi mdi-home-outline"></i></a></li>
+                                <li class="breadcrumb-item" aria-current="page"><a
+                                            href="{{ basePath }}/Admin/Menus/">{{ "Menu List" | i18n }}</a>
+                                </li>
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
+                <div class="right-title">
+                    <div class="d-flex mt-10 justify-content-end">
+                        <div class="d-lg-flex mr-20 ml-10 d-none">
+                            <a class="btn btn-primary"
+                               href="{{ basePath }}/Admin/Menus/Add" role="button">
+                                <span>{{ "Add"|i18n }}</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {{ _self.renderMenu(lists) }}
+    </section>
+{% endblock %}
+
+{% block script %}
+    {{ parent() }}
+    <script>
+        $(document).ready(function () {
+            $(document).on('click', '.dropdown,.list-down-btn', function (event) {
+                //event.preventDefault();
+                var target = $(this).attr('data-toggle');
+                $(target).slideToggle();
+                var toggleArrow = $(this).attr('data-target');
+                $(toggleArrow).toggleClass("dripicons-chevron-down  dripicons-chevron-up");
+            });
+
+            $(document).on('click', '.editlink', function (event) {
+                event.stopPropagation();
+            })
+        });
+    </script>
+{% endblock %}
+
+{% macro renderMenu(lists, level = 0) %}
+    <ul class="list-group list-group-flush mb-1">
+        {% for item in lists %}
+            <li class="list-group-item">
+                <div class="row">
+                    <div class="col-4 col-sm-3">
+                        {% if item.icon is not empty %}
+                            <i class="{{ item.icon }}"></i>
+                        {% endif %}
+                        {{ item.name }}
+                    </div>
+                    <div class="col-4 col-sm-5">
+                        <a href="{{ item.uri }}">{{ item.uri }}</a>
+                    </div>
+                    <div class="col-3 col-sm-4 text-right">
+
+                        {% if item.index > 1 %}
+                            <a href="javascript:common.formPost({move:'up', id:'{{ item.id }}'}, '{{ basePath }}/Admin/Menus/Move');"
+                               class="text-info mr-1"
+                               data-toggle="tooltip"
+                               data-original-title="{{ "Move Up" | i18n }}">
+                                <i class="uil-top-arrow-from-top"></i>
+                            </a>
+                        {% endif %}
+                        {% if item.index < lists|length %}
+                            <a href="javascript:common.formPost({move:'down', id:'{{ item.id }}'}, '{{ basePath }}/Admin/Menus/Move');"
+                               class="text-info mr-1"
+                               data-toggle="tooltip"
+                               data-original-title="{{ "Move Down" | i18n }}">
+                                <i class="uil-arrow-from-top"></i>
+                            </a>
+                        {% endif %}
+                        <a href="{{ basePath }}/Admin/Menus/Edit?id={{ item.id }}"
+                           class="text-info mr-10"
+                           data-toggle="tooltip" data-original-title="{{ "Edit" | i18n }}">{{ "Edit" | i18n }}
+                        </a>
+                    </div>
+                </div>
+                {% if item.lists %}
+                    {{ _self.renderMenu(item.lists) }}
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+{% endmacro %}

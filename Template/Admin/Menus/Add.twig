@@ -1,0 +1,80 @@
+{% import "Layout/Common/Form.twig" as forms %}
+{% extends "Layout/Main.twig" %}
+
+{% block content %}
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="d-flex align-items-center">
+            <div class="mr-auto">
+                <h3 class="page-title">{{ "Add Menu" | i18n }}</h3>
+                <div class="d-inline-block align-items-center">
+                    <nav>
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{{ basePath }}/"><i
+                                            class="mdi mdi-home-outline"></i></a></li>
+                            <li class="breadcrumb-item" aria-current="page"><a
+                                        href="{{ basePath }}/Admin/Menus/">{{ "Menu List" | i18n }}</a>
+                            </li>
+                            <li class="breadcrumb-item active" aria-current="page">{{ "Add Menu" | i18n }}</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main content -->
+    <section class="content">
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <form method="post" enctype="application/x-www-form-urlencoded">
+                            {{ forms.hidden('action', 'submit') }}
+                            <div class="form-body">
+                                <div class="row">
+                                    <div class="col-12 col-md-6">
+                                        <div class="form-group">
+                                            {{ forms.select("Menu Parent"|i18n, 'parentid', parentMenu, parentid) }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-12 col-md-6">
+                                        <div class="form-group">
+                                            {{ forms.text("Menu Name"|i18n, 'name', name, "Menu Name"|i18n, null, null, false, true, 0, 30) }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-12 col-md-6">
+                                        <div class="form-group">
+                                            {{ forms.text("Menu Icon"|i18n, 'icon', icon, "Menu Icon"|i18n, null, null, false, false, 0, 30) }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-12 col-md-6">
+                                        <div class="form-group">
+                                            {{ forms.text("Menu Uri"|i18n, 'uri', uri, "Menu Uri"|i18n, null, null, false, false, 0, 100) }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-actions mt-4">
+                                    {{ forms.submit("Submit"|i18n) }}
+                                    {{ forms.btnLink("Cancel"|i18n, basePath ~ "/Admin/Menus/", "btn-danger") }}
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </section>
+    <!-- /.content -->
+{% endblock %}
+
+{% block script %}
+{% endblock %}

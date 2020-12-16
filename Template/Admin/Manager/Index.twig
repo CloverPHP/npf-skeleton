@@ -1,0 +1,120 @@
+{% import "Layout/Common/Form.twig" as forms %}
+{% extends 'Layout/Main.twig' %}
+
+{% block content %}
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="content-header">
+            <div class="d-flex align-items-center">
+                <div class="mr-auto">
+                    <h3 class="page-title">{{ "Admin Manager" | i18n }}</h3>
+                    <div class="d-inline-block align-items-center">
+                        <nav>
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item">
+                                    <a href="{{ basePath }}/">
+                                        <i class="mdi mdi-home-outline"></i>
+                                    </a>
+                                </li>
+                                <li class="breadcrumb-item" aria-current="page"><a
+                                            href="{{ basePath }}/Admin/Manager/">{{ "Manager List" | i18n }}</a>
+                                </li>
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
+                <div class="right-title">
+                    <div class="d-flex mt-10 justify-content-end">
+                        <div class="d-lg-flex mr-20 ml-10 d-none">
+                            <a class="btn btn-primary"
+                               href="{{ basePath }}/Admin/Manager/Add"
+                               role="button">
+                                <span>{{ "Add Manager"|i18n }}</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% embed "Layout/Common/Table.twig" %}
+
+        {% block search %}
+            <div class="form-body">
+                <div class="row">
+                    <div class="col-12 col-sm-3">
+                        <div class="form-group">
+                            {% set roles = {0: "Any"|i18n}|merge(roles) %}
+                            {{ forms.select("Role"|i18n, 'roleid', roles, roleid) }}
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-3">
+                        <div class="form-group">
+                            {{ forms.text("Name"|i18n, 'name', name) }}
+                        </div>
+                    </div>
+
+                    <!-- Submit -->
+                    <div class="col-12 col-md-3">
+                        <div class="form-action mt-3">
+                            <button type="submit" class="btn btn-primary">{{ "Search" | i18n }}</button>
+                            <button type="reset" class="btn btn-danger">{{ "Reset" | i18n }}</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endblock %}
+
+        {% block  thead %}
+            <tr>
+                <th scope="col">{{ "#" | i18n }}</th>
+                <th scope="col">{{ "Username" | i18n }}</th>
+                <th scope="col">{{ "Name" | i18n }}</th>
+                <th scope="col">{{ "Role" | i18n }}</th>
+                <th scope="col">{{ "Status" | i18n }}</th>
+                <th scope="col">{{ "Action" | i18n }}</th>
+            </tr>
+        {% endblock %}
+
+        {% block tbody %}
+        {% for item in lists %}
+        <tr>
+            <td>{{ ((pagination.page - 1) * pagination.size) + loop.index }}</td>
+            <td>{{ item.user }}</td>
+            <td>{{ item.name }}</td>
+            <td>{{ item.roleName }}</td>
+            <td>
+                <input type="checkbox" id="itemStatus[{{ item.id }}]" data-switch="success"
+                       class="itemStatus" data-id="{{ item.id }}"{{ item.status == 1 ? " checked" : "" }}/>
+                <label for="itemStatus[{{ item.id }}]" data-on-label="" data-off-label=""></label>
+            </td>
+            <td>
+                <a href="{{ basePath }}/Admin/Manager/Edit?id={{ item.id }}"
+                   class="text-info mr-10"
+                   data-toggle="tooltip" data-original-title="{{ "Edit" | i18n }}">{{ "Edit" | i18n }}
+                </a>
+            </td>
+            {% endfor %}
+            {% endblock %}
+
+            {% endembed %}
+    </section>
+{% endblock %}
+
+{% block script %}
+    <script>
+        $('input.itemStatus').click(function (e) {
+            var me = this, id = $(me).data('id'),
+                status = $(me).prop("checked");
+            common.showWait();
+            common.post('{{ basePath }}/Admin/Manager/Status', {id: id, status: (status ? '1' : '0')},
+                function () {
+                    common.hideWait();
+                }, function () {
+                    common.hideWait();
+                    $(me).prop("checked", !status);
+                });
+        });
+    </script>
+{% endblock %}

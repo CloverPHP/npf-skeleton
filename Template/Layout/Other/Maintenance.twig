@@ -1,0 +1,13 @@
+{% extends "Layout/Auth.twig" %}
+
+{% block title %}{{ "Under maintenance"|i18n }}{% endblock %}
+{% block content %}
+    <div class="text-center">
+        <h1 class="text-error mt-4 h1">{{ "Under Maintenance"|i18n|upper }}!</h1>
+        <h4 class="text-uppercase text-danger mt-3">{{ "We're sorry for the inconvenience."|i18n }}</h4>
+        <p class="text-muted mt-3">{{ "Please check back later."|i18n }}</p>
+        <a id="back" class="btn btn-info mt-3" href="/">
+            <i class="mdi mdi-refresh"></i>{{ 'Reload Page'|i18n }}
+        </a>
+    </div>
+{% endblock %}

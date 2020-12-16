@@ -1,0 +1,119 @@
+{% extends 'Layout/Main.twig' %}
+
+{% block content %}
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="content-header">
+            <div class="d-flex align-items-center">
+                <div class="mr-auto">
+                    <h3 class="page-title">{{ "Role List" | i18n }}</h3>
+                    <div class="d-inline-block align-items-center">
+                        <nav>
+                            <ol class="breadcrumb">
+								<li class="breadcrumb-item">
+									<a href="{{ basePath }}/">
+										<i class="mdi mdi-home-outline"></i>
+									</a>
+								</li>
+                                <li class="breadcrumb-item" aria-current="page"><a
+                                            href="{{ basePath }}/Admin/Roles/">{{ "Role List" | i18n }}</a>
+                                </li>
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
+                <div class="right-title">
+                    <div class="d-flex mt-10 justify-content-end">
+                        <div class="d-lg-flex mr-20 ml-10 d-none">
+                            <a class="btn btn-primary" href="{{ basePath }}/Admin/Roles/Add"
+                               role="button">
+                                <span>{{ "Add Role"|i18n }}</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% embed "Layout/Common/Table.twig" %}
+
+            {% block search %}
+            {% endblock %}
+
+            {% block  thead %}
+                <tr>
+                    <th scope="col">{{ "Id" | i18n }}</th>
+                    <th scope="col">{{ "Role Name" | i18n }}</th>
+                    <th scope="col">{{ "Role Description" | i18n }}</th>
+                    <th scope="col">{{ "Status" | i18n }}</th>
+                    <th scope="col">{{ "Action" | i18n }}</th>
+                </tr>
+            {% endblock %}
+
+            {% block tbody %}
+                {% for item in lists %}
+                    <tr>
+                        <td>{{ item.id }}</td>
+                        <td>{{ item.name }}</td>
+                        <td>{{ item.description }}</td>
+                        <td>
+                            <input type="checkbox" id="itemStatus[{{ item.id }}]" data-switch="success"
+                                   class="itemStatus" data-id="{{ item.id }}"{{ item.status == 1 ? " checked" : "" }}/>
+                            <label for="itemStatus[{{ item.id }}]" data-on-label="" data-off-label=""></label>
+                        </td>
+                        <td>
+                            <a href="{{ basePath }}/Admin/Roles/Edit?id={{ item.id }}"
+                               class="text-info mr-10"
+                               data-toggle="tooltip" data-original-title="{{ "Edit" | i18n }}">{{ "Edit" | i18n }}
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            {% endblock %}
+
+        {% endembed %}
+    </section>
+{% endblock %}
+
+{% block script %}
+    <script>
+        $('input.itemStatus').click(function (e) {
+            var me = this, id = $(me).data('id'),
+                status = $(me).prop("checked");
+            common.showWait();
+            common.post('{{ basePath }}/Admin/Roles/Status', {id: id, status: (status ? '1' : '0')},
+                function () {
+                    common.hideWait();
+                    // $(me).prop("checked", !status);
+                }, function () {
+                    common.hideWait();
+                    $(me).prop("checked", !status);
+                });
+        });
+
+        $('a.product-del').click(function (e) {
+            e.preventDefault();
+
+            dialog.warningQuest(
+                "{{ 'Confirm message'|i18n }}"
+                , "{{ 'Are you sure to delete?'|i18n }}"
+                , function () {
+                    var me = this;
+                    var id = $(me).data('id');
+                    common.showWait();
+                    common.post('{{ basePath }}/Admin/Role/Delete', {id: id}, function () {
+                            common.hideWait();
+                            dialog.success("{{ "Message"|i18n }}",
+                                "{{ 'delete success' |i18n }}", function () {
+                                    common.reload();
+                                });
+                        },
+                        function () {
+                            common.hideWait();
+                        });
+                    return false;
+                });
+        });
+    </script>
+{% endblock %}

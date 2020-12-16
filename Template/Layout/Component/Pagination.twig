@@ -1,0 +1,82 @@
+{% if not pageRange %}
+    {% set pageRange = 3 %}
+{% endif %}
+
+{% if pagination and pagination.page and pagination.total %}
+    <nav class="d-print-none row justify-content-between p-1" aria-label="Page pagination">
+        <ul class="pagination col-6">
+            {% if pagination and pagination.page and pagination.total > 1 %}
+
+                {# pagination first page #}
+                {% if pagination.page > pageRange %}
+                    <li class="page-item" data-page="first">
+                        <a class="page-link" href="#">
+                            <i class="mdi mdi-arrow-collapse-left align-text-top"></i>
+                        </a>
+                    </li>
+                {% endif %}
+
+                {# pagination previous page #}
+                {% if pagination.page > 2 %}
+                    <li class="page-item" data-page="prev">
+                        <a class="page-link" href="#" aria-label="Previous">
+                            <i class="mdi mdi-arrow-left align-text-top"></i>
+                        </a>
+                    </li>
+                {% endif %}
+
+                {# pagingnation before current page #}
+                {% if pagination.page > 1 %}
+                    {% for i in (pagination.page > pageRange ? (pagination.page - pageRange) : 1)..(pagination.page -1) %}
+                        <li class="page-item" data-page="{{ i }}">
+                            <a class="page-link" href="#">{{ i }}</a>
+                        </li>
+                    {% endfor %}
+                {% endif %}
+
+                {# current page #}
+                <li class="page-item active" data-page="{{ pagination.page }}">
+                    <a class="page-link" href="#">{{ pagination.page }}</a>
+                </li>
+
+                {# pagingnation after current page #}
+                {% if pagination.total > pagination.page %}
+                    {% for i in  (pagination.page + 1)..(pagination.total > pagination.page + 3 ? pagination.page + 3 : pagination.total) %}
+                        <li class="page-item" data-page="{{ i }}">
+                            <a class="page-link" href="#">{{ i }}</a>
+                        </li>
+                    {% endfor %}
+                {% endif %}
+
+                {# pagination next page #}
+                {% if pagination.total > page + 2 and pagination.total > pageRange %}
+                    <li class="page-item" data-page="next">
+                        <a class="page-link" href="#" aria-label="Next">
+                            <i class="mdi mdi-arrow-right align-text-top"></i>
+                        </a>
+                    </li>
+                {% endif %}
+
+                {# pagingnation last page #}
+                {% if pagination.total > page and pagination.total > pageRange + page %}
+                    <li class="page-item" data-page="last">
+                        <a class="page-link" href="#" aria-label="Next">
+                            <i class="mdi mdi-arrow-collapse-right align-text-top"></i>
+                        </a>
+                    </li>
+                {% endif %}
+            {% endif %}
+        </ul>
+        {% if pagination and pagination.size and pagination.total and (pagination.count > 20 or pagination.count is empty) %}
+            <div class="col-6 col-md-2">
+                <select class="form-control page-item">
+                    {% for pageNumber in [10, 20, 50, 100] %}
+                        <option value="{{ pageNumber }}"{{ pageNumber == pagination.size ? ' selected':'' }}>
+                            {{ pageNumber }} / {{ "Page"|i18n }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+        {% endif %}
+    </nav>
+{% endif %}

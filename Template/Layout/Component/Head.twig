@@ -1,0 +1,39 @@
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="google" content="notranslate">
+    {% block meta %}{% endblock %}
+
+    <title>{% block title %}{% endblock %}</title>
+
+    <!-- PWA Declaration -->
+    <meta name="msapplication-TileColor" content="#343a40">
+    <meta name="msapplication-TileImage" content="{{ imageSource }}/logo/144.png">
+    <link crossorigin="anonymous" rel="manifest" href="/manifest.json">
+    <link crossorigin="anonymous" rel="shortcut icon" href="{{ imageSource }}/logo/favicon.ico">
+    <link crossorigin="anonymous" rel="apple-touch-icon" sizes="57x57" href="{{ imageSource }}/logo/57.png">
+    <link crossorigin="anonymous" rel="apple-touch-icon" sizes="60x60" href="{{ imageSource }}/logo/60.png">
+    <link crossorigin="anonymous" rel="apple-touch-icon" sizes="72x72" href="{{ imageSource }}/logo/72.png">
+    <link crossorigin="anonymous" rel="apple-touch-icon" sizes="76x76" href="{{ imageSource }}/logo/76.png">
+    <link crossorigin="anonymous" rel="apple-touch-icon" sizes="114x114" href="{{ imageSource }}/logo/114.png">
+    <link crossorigin="anonymous" rel="apple-touch-icon" sizes="120x120" href="{{ imageSource }}/logo/120.png">
+    <link crossorigin="anonymous" rel="apple-touch-icon" sizes="144x144" href="{{ imageSource }}/logo/144.png">
+    <link crossorigin="anonymous" rel="apple-touch-icon" sizes="152x152" href="{{ imageSource }}/logo/152.png">
+    <link crossorigin="anonymous" rel="apple-touch-icon" sizes="180x180" href="{{ imageSource }}/logo/180.png">
+    <link crossorigin="anonymous" rel="icon" type="image/png" sizes="192x192" href="{{ imageSource }}/logo/192.png">
+    <link crossorigin="anonymous" rel="icon" type="image/png" sizes="32x32" href="{{ imageSource }}/logo/32.png">
+    <link crossorigin="anonymous" rel="icon" type="image/png" sizes="96x96" href="{{ imageSource }}/logo/96.png">
+    <link crossorigin="anonymous" rel="icon" type="image/png" sizes="16x16" href="{{ imageSource }}/logo/16.png">
+
+    <!-- third party css -->
+    <link crossorigin="anonymous" href="{{ assetsSource }}/css/vendor/jquery-jvectormap-1.2.2.css" rel="stylesheet" type="text/css"/>
+    <link crossorigin="anonymous" href="{{ mediaSource }}/css/cursor.min.css" rel="stylesheet" type="text/css"/>
+    <link crossorigin="anonymous" rel="stylesheet" href="{{ mediaSource }}/css/waitMe.min.css">
+    <!-- third party css end -->
+
+    <!-- App css -->
+    <link crossorigin="anonymous" href="{{ assetsSource }}/css/icons.min.css" rel="stylesheet" type="text/css"/>
+    <link crossorigin="anonymous" href="{{ assetsSource }}/css/app-modern.min.css" rel="stylesheet" type="text/css" id="light-style"/>
+    <link crossorigin="anonymous" href="{{ assetsSource }}/css/app-modern-dark.min.css" rel="stylesheet" type="text/css" id="dark-style"/>
+    {% block css %}{% endblock %}
+</head>

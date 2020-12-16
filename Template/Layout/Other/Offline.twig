@@ -1,0 +1,20 @@
+{% extends "Layout/Auth.twig" %}
+
+{% block title %}Master Admin - {{ "Offline" | i18n }}{% endblock %}
+{% block content %}
+    <div class="text-center">
+        <img crossorigin="anonymous" src="{{ assetsSource }}/images/startman.svg" height="120" alt="File not found Image">
+        <h4 class="text-uppercase text-danger mt-3">{{ "You are offline now" | i18n }}</h4>
+        <p class="text-muted mt-3">{{ "Why not try refreshing your page?" | i18n }}</p>
+        <a id="back" class="btn btn-info mt-3" href="#">
+            <i class="mdi mdi-reply"></i>{{ "Retry"|i18n }}
+        </a>
+    </div>
+{% endblock %}
+{% block script %}
+    <script>
+        $('a#back').click(function () {
+            window.location.href = '/';
+        });
+    </script>
+{% endblock %}

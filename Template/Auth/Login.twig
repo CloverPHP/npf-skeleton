@@ -1,0 +1,122 @@
+{% extends "Layout/Auth.twig" %}
+
+{% block title %}Accounting - {{ "Login"|i18n }}{% endblock %}
+{% block content %}
+    <div class="text-center w-75 m-auto">
+        <h4 class="text-dark-50 text-center mt-0 font-weight-bold text-uppercase">{{ "Sign In"|i18n }}</h4>
+        <p class="text-muted mb-4">{{ 'Enter your user name and password to continue.' | i18n }}</p>
+    </div>
+
+    <form id="signin" action="/Auth/Login" method="post" type="application/x-www-form-urlencoded">
+
+        <div class="form-group">
+            <label for="user">{{ "User Name"|i18n }}</label>
+            <input class="form-control" type="text" id="user" name="user" required maxlength="50">
+        </div>
+
+        <div class="form-group">
+            <label for="password">{{ "Password"|i18n }}</label>
+            <input type="password" id="pass" name="pass" class="form-control" required minlength="6">
+        </div>
+
+        <div class="form-group mb-3">
+            <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" id="remember" name="remember"
+                       checked>
+                <label class="custom-control-label" for="remember">{{ "Remember Me"|i18n }}</label>
+            </div>
+        </div>
+
+        <div class="form-group mb-0 text-center">
+            <button class="btn btn-primary" type="submit">{{ "Sign In"|i18n|upper }}</button>
+        </div>
+
+    </form>
+
+    <div class="topbar-right-menu text-center mt-3">
+        <div class="dropdown topbar-dropdown">
+            <a class="dropdown-toggle arrow-none" data-toggle="dropdown" id="topbar-languagedrop"
+               href="#"
+               role="button" aria-haspopup="true" aria-expanded="false">
+                <img crossorigin="anonymous" src="{{ assetsSource }}/images/flags/{{ lang }}.png"
+                     alt="user-image"
+                     class="mr-1" height="24"> <span
+                        class="align-middle">{{ langName }}</span> <i class="mdi mdi-chevron-down"></i>
+            </a>
+            <div class="dropdown-menu dropdown-menu-right dropdown-menu-animated topbar-dropdown-menu"
+                 aria-labelledby="topbar-languagedrop">
+
+                {% for lgCode, lgName in allLang %}
+                    <!-- item-->
+                    <a href="javascript:common.lang('{{ lgCode }}');"
+                       class="dropdown-item notify-item">
+                        <img crossorigin="anonymous"
+                             src="{{ assetsSource }}/images/flags/{{ lgCode }}.png"
+                             alt="user-image" class="mr-1" height="24">
+                        <span class="align-middle lang">{{ lgName }}</span>
+                    </a>
+                {% endfor %}
+
+            </div>
+        </div>
+
+        <div class="mt-5">
+            <span class="h4 text-primary">{{ "Login with"|i18n }}:</span>
+            <div class="d-flex justify-content-center">
+
+                {% for social in ['google','facebook','microsoft','spotify'] %}
+                    <!-- item-->
+                    <a href="{{ basePath }}/Auth/Login?action={{ social }}" class="h1 text-primary p-2">
+                        <i class="mdi mdi-{{ social }}"></i>
+                    </a>
+                {% endfor %}
+
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block script %}
+    <script>
+
+        $('form#signin').submit(
+            function (e) {
+                e.preventDefault();
+                this.backEndLoginEmail = function () {
+                    common.post('{{ basePath }}/Auth/Login', {
+                        action: 'user',
+                        user: $('input#user').val(),
+                        pass: $('input#pass').val(),
+                    }, function () {
+                        common.reload();
+                    }, function () {
+                        common.hideWait();
+                    });
+                };
+
+                var pass = true;
+                pass = common.checkInput(pass, 'input#email', 'span#email_tip');
+                pass = common.checkInput(pass, 'input#password', 'span#password_tip');
+                if ($('input#remember').is(':checked')) {
+                    localStorage.setItem('login.user', $('input#user').val());
+                    localStorage.setItem('login.pass', $('input#pass').val());
+                    localStorage.setItem('login.remember', '1');
+                }else{
+                    localStorage.removeItem('login.user');
+                    localStorage.removeItem('login.pass');
+                    localStorage.setItem('login.remember', '0');
+                }
+                if (pass) {
+                    common.showWait();
+                    this.backEndLoginEmail();
+                }
+            });
+
+        $(document).ready(function () {
+            $('input#user').val(localStorage.getItem('login.user'));
+            $('input#pass').val(localStorage.getItem('login.pass'));
+            var remember = localStorage.getItem('login.remember');
+            $('input#remember').prop('checked', remember === null ? true : remember === '1');
+        });
+    </script>
+{% endblock %}

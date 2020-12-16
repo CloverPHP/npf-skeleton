@@ -1,0 +1,74 @@
+{% macro listMenu(item) %}
+    <li{% if item.lists|length > 0 %} class="side-nav-item"{% endif %}>
+        <a aria-expanded="false"
+           href="javascript: {% if item.lists|length > 0 and item.uri == '' %}void(0);{% else %}common.reload('{{ basePath }}{{ item.uri }}');{% endif %}" {% if item.level <= 1 %} class="side-nav-link"{% endif %}>
+            {% if item.icon != '' %}
+                <i class="{{ item.icon }}"></i>
+            {% endif %}
+            <span>{{ item.name|i18n }} </span>
+            {% if item.lists|length > 0 %}
+                <span class="menu-arrow"></span>
+            {% endif %}
+        </a>
+        {% if item.lists|length > 0 %}
+            {{ _self.layerMenu(item.lists, item.level) }}
+        {% endif %}
+    </li>
+{% endmacro %}
+{% macro layerMenu(lists, level) %}
+    {% set layerName = {
+        1:"side-nav-second-level",
+        2:"side-nav-third-level",
+        3:"side-nav-forth-level",
+    } %}
+    <ul{% if layerName[level] is not empty %} class="{{ layerName[level] }}"{% endif %} aria-expanded="false">
+        {% for item in lists %}
+            {{ _self.listMenu(item) }}
+        {% endfor %}
+    </ul>
+{% endmacro %}
+
+<!-- ========== Left Sidebar Start ========== -->
+<div class="left-side-menu left-side-menu-detached">
+
+    <div class="leftbar-user">
+        <a href="{{ basePath }}/Profile/">
+            <i class="mdi mdi-account display-4 rounded-circle shadow-sm"></i>
+            <span class="leftbar-user-name">{{ admin.name }}</span>
+        </a>
+    </div>
+
+    <!--- Sidemenu -->
+    <ul class="metismenu side-nav">
+        {% for item in panelMenus %}
+            <li class="{{ item.lists|length > 0 ? "side-nav-title ": "" }}side-nav-item">
+                {% if item.lists|length > 0 and item.uri == '' %}
+                    {% if item.icon != '' %}
+                        <i class="{{ item.icon }} mr-1"></i>
+                    {% endif %}
+                    <span>{{ item.name|i18n }}</span>
+                {% else %}
+                    <a href="{{ basePath ~ item.uri }}"
+                       class="side-nav-link">
+                        {% if item.icon != '' %}
+                            <i class="{{ item.icon }} mr-1"></i>
+                        {% endif %}
+                        <span>{{ item.name|i18n }}</span>
+                    </a>
+                {% endif %}
+            </li>
+            {% if item.lists|length > 0 %}
+                {% for itm in item.lists %}
+                    {{ _self.listMenu(itm) }}
+                {% endfor %}
+            {% endif %}
+        {% endfor %}
+    </ul>
+
+    <!-- End Sidebar -->
+
+    <div class="clearfix"></div>
+    <!-- Sidebar -left -->
+
+</div>
+<!-- Left Sidebar End -->

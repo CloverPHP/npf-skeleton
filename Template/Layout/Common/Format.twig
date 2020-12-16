@@ -1,0 +1,44 @@
+{% macro conditionNumber(amount) %}
+    {% if amount > 0 %}
+        <span class="text-success">{{ amount|abs|number_format(2) }}</span>
+    {% elseif amount < 0 %}
+        <span class="text-danger">{{ amount|abs|number_format(2) }}</span>
+    {% else %}
+        <span class="text-secondary">-</span>
+    {% endif %}
+{% endmacro %}
+
+{% macro number(amount) %}
+    {{ amount|number_format(2) }}
+{% endmacro %}
+
+{% macro showCurrecy(currency) %}
+    {% if currency is not empty %}
+        (<span class="text-info">{{ currency }}</span>)
+    {% endif %}
+{% endmacro %}
+
+{% macro bytesToSize(bytes) %}
+    {% spaceless %}
+        {% set kilobyte = 1024 %}
+        {% set megabyte = kilobyte * 1024 %}
+        {% set gigabyte = megabyte * 1024 %}
+        {% set terabyte = gigabyte * 1024 %}
+
+        {% if bytes < kilobyte %}
+            {% if bytes > 1 %}
+                {{ bytes ~ ' Byte' }}
+            {% else %}
+                {{ bytes ~ ' Bytes' }}
+            {% endif %}
+        {% elseif bytes < megabyte %}
+            {{ (bytes / kilobyte)|number_format(2, '.') ~ ' KB' }}
+        {% elseif bytes < gigabyte %}
+            {{ (bytes / megabyte)|number_format(2, '.') ~ ' MB' }}
+        {% elseif bytes < terabyte %}
+            {{ (bytes / gigabyte)|number_format(2, '.') ~ ' GB' }}
+        {% else %}
+            {{ (bytes / terabyte)|number_format(2, '.') ~ ' TB' }}
+        {% endif %}
+    {% endspaceless %}
+{% endmacro %}

@@ -1,0 +1,23 @@
+{% extends "Layout/Auth.twig" %}
+{% block title %}Master Admin - 500 {{ "Error"|i18n }}{% endblock %}
+{% block content %}
+    <div class="text-center">
+        <img crossorigin="anonymous" src="{{ assetsSource }}/images/startman.svg" height="120" alt="File not found Image">
+        <h1 class="text-error mt-4">5<i class="mdi mdi-emoticon-sad"></i>0</h1>
+        <h4 class="text-uppercase text-danger mt-3">{{ "Internal Server Error" | i18n }}</h4>
+        <p class="text-muted mt-3">{{ "Why not try refreshing your page?" | i18n }}</p>
+        <a id="back" class="btn btn-info mt-3" href="#">
+            <i class="mdi mdi-reply"></i>{{ "Back"|i18n }}
+        </a>
+    </div>
+{% endblock %}
+{% block script %}
+    <script>
+        $('a#back').click(function () {
+            if (document.referrer !== "")
+                history.back();
+            else
+                window.location.href = '/';
+        });
+    </script>
+{% endblock %}

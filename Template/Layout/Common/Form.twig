@@ -1,0 +1,212 @@
+{% macro hidden(name, value) %}
+    <input id="{{ name }}" name="{{ name }}" type="hidden" value="{{ value|e }}"/>
+{% endmacro %}
+
+{% macro text(label, name, value, placeHolder = null, prefix = false, postfix = false, readonly = false, required = false, minLength = 0, maxLength = 0, style = '') %}
+    {% if label is not empty %}
+        <label class="font-weight-700 font-size-16"
+               for="{{ name }}">{{ label }}</label>
+    {% endif %}
+    {% if prefix is empty and postfix is empty %}
+        <input id="{{ name }}" name="{{ name }}" type="text"
+               class="form-control"{% if style %} style="{{ style }}"{% endif %}
+               placeholder="{{ placeHolder ?? label }}"
+               value="{{ value|e }}"{% if readonly %} readonly{% endif %}{% if required %} required{% endif %}{% if minLength > 0 %} minlength="{{ minLength }}"{% endif %}{% if maxLength > 0 %} maxlength="{{ maxLength }}"{% endif %} />
+    {% else %}
+        <div class="input-group"{% if style %} style="{{ style }}"{% endif %}>
+            {% if prefix %}
+                <div class="input-group-prepend">{{ prefix }}</div>
+            {% endif %}
+            <input id="{{ name }}" name="{{ name }}" type="text" class="form-control"
+                   placeholder="{{ placeHolder ?? label }}"
+                   value="{{ value|e }}"{% if readonly %} readonly{% endif %}{% if required %} required{% endif %}{% if minLength > 0 %} minlength="{{ minLength }}"{% endif %}{% if maxLength > 0 %} maxlength="{{ maxLength }}"{% endif %} />
+            {% if postfix %}
+                <div class="input-group-append">
+                    {{ postfix }}
+                </div>
+            {% endif %}
+        </div>
+    {% endif %}
+{% endmacro %}
+
+{% macro email(label, name, value, placeHolder = null, prefix = false, postfix = false, readonly = false, required = false, minLength = 0, maxLength = 0, style = '') %}
+    {% if label is not empty %}
+        <label class="font-weight-700 font-size-16"
+               for="{{ name }}">{{ label }}</label>
+    {% endif %}
+    {% if prefix is empty and postfix is empty %}
+        <input id="{{ name }}" name="{{ name }}" type="email"
+               class="form-control"{% if style %} style="{{ style }}"{% endif %}
+               placeholder="{{ placeHolder ?? label }}"
+               value="{{ value|e }}"{% if readonly %} readonly{% endif %}{% if required %} required{% endif %}{% if minLength > 0 %} minlength="{{ minLength }}"{% endif %}{% if maxLength > 0 %} maxlength="{{ maxLength }}"{% endif %} />
+    {% else %}
+        <div class="input-group"{% if style %} style="{{ style }}"{% endif %}>
+            {% if prefix %}
+                <div class="input-group-prepend">{{ prefix }}</div>
+            {% endif %}
+            <input id="{{ name }}" name="{{ name }}" type="email" class="form-control"
+                   placeholder="{{ placeHolder ?? label }}"
+                   value="{{ value|e }}"{% if readonly %} readonly{% endif %}{% if required %} required{% endif %}{% if minLength > 0 %} minlength="{{ minLength }}"{% endif %}{% if maxLength > 0 %} maxlength="{{ maxLength }}"{% endif %} />
+            {% if postfix %}
+                <div class="input-group-append">
+                    {{ postfix }}
+                </div>
+            {% endif %}
+        </div>
+    {% endif %}
+{% endmacro %}
+
+{% macro password(label, name, value, placeHolder = null, prefix = false, postfix = false, readonly = false, required = false, minLength = 0, maxLength = 0, style = '') %}
+    {% if label is not empty %}
+        <label class="font-weight-700 font-size-16"
+               for="{{ name }}">{{ label }}</label>
+    {% endif %}
+    {% if prefix is empty and postfix is empty %}
+        <input id="{{ name }}" name="{{ name }}" type="password"
+               class="form-control"{% if style %} style="{{ style }}"{% endif %}
+               placeholder="{{ placeHolder ?? label }}"
+               value="{{ value|e }}"{% if readonly %} readonly{% endif %}{% if required %} required{% endif %}{% if minLength > 0 %} minlength="{{ minLength }}"{% endif %}{% if maxLength > 0 %} maxlength="{{ maxLength }}"{% endif %} />
+    {% else %}
+        <div class="input-group"{% if style %} style="{{ style }}"{% endif %}>
+            {% if prefix %}
+                <div class="input-group-prepend">{{ prefix }}</div>
+            {% endif %}
+            <input id="{{ name }}" name="{{ name }}" type="password" class="form-control"
+                   placeholder="{{ placeHolder ?? label }}"
+                   value="{{ value|e }}"{% if readonly %} readonly{% endif %}{% if required %} required{% endif %}{% if minLength > 0 %} minlength="{{ minLength }}"{% endif %}{% if maxLength > 0 %} maxlength="{{ maxLength }}"{% endif %} />
+            {% if postfix %}
+                <div class="input-group-append">
+                    {{ postfix }}
+                </div>
+            {% endif %}
+        </div>
+    {% endif %}
+{% endmacro %}
+
+{% macro number(label, name, value, placeHolder = null, prefix = false, postfix = false, readonly = false, required = false, minLength = 0, maxLength = 0, step = 0, style = '') %}
+    {% if label is not empty %}
+        <label class="font-weight-700 font-size-16"
+               for="{{ name }}">{{ label }}</label>
+    {% endif %}
+    {% if prefix is empty and postfix is empty %}
+        <input id="{{ name }}" name="{{ name }}" type="number"
+               class="form-control"{% if style %} style="{{ style }}"{% endif %}
+               placeholder="{{ placeHolder ?? label }}"
+               value="{{ value|e }}"{% if readonly %} readonly{% endif %}{% if required %} required{% endif %}{% if minLength > 0 %} minlength="{{ minLength }}"{% endif %}{% if maxLength > 0 %} maxlength="{{ maxLength }}" onKeyPress="if(this.value.length === {{ maxLength }}) return false;"{% endif %}{% if step > 0 %} step="{{ step }}"{% endif %} />
+    {% else %}
+        <div class="input-group"{% if style %} style="{{ style }}"{% endif %}>
+            {% if prefix %}
+                <div class="input-group-prepend">{{ prefix }}</div>
+            {% endif %}
+            <input id="{{ name }}" name="{{ name }}" type="number" class="form-control"
+                   placeholder="{{ placeHolder ?? label }}"
+                   value="{{ value|e }}"{% if readonly %} readonly{% endif %}{% if required %} required{% endif %}{% if minLength > 0 %} minlength="{{ minLength }}"{% endif %}{% if maxLength > 0 %} maxlength="{{ maxLength }}" onKeyPress="if(this.value.length === {{ maxLength }}) return false;"{% endif %}{% if step > 0 %} step="{{ step }}"{% endif %} />
+            {% if postfix %}
+                <div class="input-group-append">
+                    {{ postfix }}
+                </div>
+            {% endif %}
+        </div>
+    {% endif %}
+{% endmacro %}
+
+{% macro date(label, name, value, prefix = false, postfix = false, readonly = false, required = false, minDate = '', maxDate = '', style = '') %}
+    {% if label is not empty %}
+        <label class="font-weight-700 font-size-16"
+               for="{{ name }}">{{ label }}</label>
+    {% endif %}
+    {% if prefix is empty and postfix is empty %}
+        <input id="{{ name }}" name="{{ name }}" type="date"
+               class="form-control"{% if style %} style="{{ style }}"{% endif %}
+               value="{{ value|e }}"{% if readonly %} readonly{% endif %}{% if required %} required{% endif %}{% if minDate %} min="{{ minDate }}"{% endif %}{% if maxDate %} max="{{ maxDate }}"{% endif %} />
+    {% else %}
+        <div class="input-group"{% if style %} style="{{ style }}"{% endif %}>
+            {% if prefix %}
+                <div class="input-group-prepend">{{ prefix }}</div>
+            {% endif %}
+            <input id="{{ name }}" name="{{ name }}" type="number" class="form-control"
+                   value="{{ value|e }}"{% if readonly %} readonly{% endif %}{% if required %} required{% endif %}{% if minDate %} min="{{ minDate }}"{% endif %}{% if maxDate %} max="{{ maxDate }}"{% endif %} />
+            {% if postfix %}
+                <div class="input-group-append">
+                    {{ postfix }}
+                </div>
+            {% endif %}
+        </div>
+    {% endif %}
+{% endmacro %}
+
+{% macro textarea(label, name, value, rows = 4, readonly = false, required = false, minLength = 0, maxLength = 0) %}
+    <label class="font-weight-700 font-size-16" for="{{ name }}">{{ label }}</label>
+    <textarea id="{{ name }}" name="{{ name }}" class="form-control p-20"
+              placeholder="{{ label }}"
+              rows="{{ rows }}"{% if minLength > 0 %} minlength="{{ minLength }}"{% endif %}{% if maxLength > 0 %} maxlength="{{ maxLength }}"{% endif %}{% if readonly %} readonly{% endif %}{% if required %} required{% endif %}>{{ value|e }}</textarea>
+{% endmacro %}
+
+{% macro radio(label, name, options, selected) %}
+    <label class="font-weight-700 font-size-16">{{ label }}</label>
+    <div class="row radio-list">
+        {% set key = 0 %}
+        {% for optVal, optLabel in options %}
+            <div class="col-4 radio radio-info">
+                <label class="radio-inline p-0 mr-10" for="{{ name ~ counter }}">
+                    <input type="radio" name="{{ name }}" id="{{ name ~ counter }}"
+                           value="{{ optVal }}" {{ optVal == selected ? " checked":"" }}>
+                    <label for="{{ name ~ counter }}">{{ optLabel }}</label>
+                </label>
+            </div>
+            {% set key = key + 1 %}
+        {% endfor %}
+    </div>
+{% endmacro %}
+
+{% macro checkbox(label, name, options, selected) %}
+    <label class="font-weight-700 font-size-16">{{ label }}</label>
+    <div class="row">
+        {% set key = 0 %}
+        {% for optVal, optLabel in options %}
+            <div class="col-4">
+                <input type="checkbox" name="{{ name }}[]" id="{{ name ~ '[' ~ key ~ ']' }}"
+                       value="{{ optVal }}" {{ optVal in selected ? " checked":"" }}>
+                <label for="{{ name ~ '[' ~ key ~ ']' }}">{{ optLabel }}</label>
+            </div>
+            {% set key = key + 1 %}
+        {% endfor %}
+    </div>
+{% endmacro %}
+
+{% macro select(label, name, options, selected) %}
+    <label class="font-weight-700 font-size-16" for="{{ name }}">{{ label }}</label>
+    <select class="form-control" id="{{ name }}" name="{{ name }}">
+        {% for optVal, optLabel in options %}
+            {% if optLabel is iterable %}
+                <optgroup label="value">
+                    {% for grpVal, grpLabel in optLabel %}
+                        <option value="{{ grpVal }}"{{ selected == grpVal ? " selected":"" }}>{{ grpLabel }}</option>
+                    {% endfor %}
+                </optgroup>
+            {% else %}
+                <option value="{{ optVal }}"{{ selected == optVal ? " selected":"" }}>{{ optLabel }}</option>
+            {% endif %}
+        {% endfor %}
+    </select>
+{% endmacro %}
+
+{% macro submit(label, onClick) %}
+    <button type="submit" class="btn btn-primary"{{ onClick ? " onClick=\"" ~ onClick ~"\"":"" }}>
+        <i class="fa fa-check"></i> {{ label }}
+    </button>
+{% endmacro %}
+
+{% macro reset(label, onClick = '') %}
+    <button type="reset" class="btn btn-danger"{{ onClick != '' ? " onClick=\"" ~ onClick ~"\"":"" }}>
+        <i class="fa fa-exclamation"></i> {{ label }}
+    </button>
+{% endmacro %}
+
+{% macro btnLink(label, href ="#", class = "btn-primary", onClick = '') %}
+    <a class="btn{{ class ? " " ~ class: "" }}" href="{{ href }}"{{ onClick != '' ? " onClick=" ~ onClick:"" }}
+       role="button">{{ label }}</a>
+{% endmacro %}
+
+
+

@@ -1,0 +1,86 @@
+{% embed "Layout/Component/TopNavBar.twig" %}
+    {% block topNavContent %}
+        <!-- Header Start -->
+        <ul class="list-unstyled topbar-right-menu float-right mb-0">
+
+            <li class="dropdown notification-list topbar-dropdown">
+                <a class="nav-link dropdown-toggle arrow-none" data-toggle="dropdown" id="topbar-languagedrop" href="#"
+                   role="button" aria-haspopup="true" aria-expanded="false">
+                    <img crossorigin="anonymous" src="{{ assetsSource }}/images/flags/{{ lang }}.png" alt="user-image"
+                         class="mr-1" height="24">
+                    <span class="align-middle">{{ langName }}</span> <i class="mdi mdi-chevron-down"></i>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right dropdown-menu-animated topbar-dropdown-menu"
+                     aria-labelledby="topbar-languagedrop">
+
+                    {% for lgCode, lgName in allLang %}
+                        <!-- item-->
+                        <a href="javascript:common.lang('{{ lgCode }}');" class="dropdown-item notify-item">
+                            <img crossorigin="anonymous" src="{{ assetsSource }}/images/flags/{{ lgCode }}.png"
+                                 alt="user-image" class="mr-1" height="24">
+                            <span class="align-middle lang">{{ lgName }}</span>
+                        </a>
+                    {% endfor %}
+
+                </div>
+            </li>
+
+            <li class="notification-list">
+                <a class="nav-link right-bar-toggle" href="javascript: void(0);">
+                    <i class="dripicons-gear noti-icon"></i>
+                </a>
+            </li>
+
+            <li class="notification-list d-none" id="add2Home">
+                <a class="nav-link app-installer" id="add2HomeBtn" href="javascript: void(0);">
+                    <i class="mdi mdi-home-plus noti-icon"></i>
+                </a>
+            </li>
+
+            <!-- User Message -->
+            <li class="dropdown notification-list">
+                <a class="nav-link dropdown-toggle nav-user arrow-none mr-0" data-toggle="dropdown" id="topbar-userdrop"
+                   href="#" role="button" aria-haspopup="true"
+                   aria-expanded="false">
+                    <span class="account-user-avatar">
+                        <i class="mdi mdi-account h2 rounded-circle shadow-sm"></i>
+                    </span>
+                    <span>
+                        <span class="account-user-name">{{ admin.name }}</span>
+                        <span class="account-position">{{ admin.user }}</span>
+                    </span>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right dropdown-menu-animated topbar-dropdown-menu profile-dropdown"
+                     aria-labelledby="topbar-userdrop">
+
+                    <!-- Welcome Message -->
+                    <div class=" dropdown-header noti-title">
+                        <h6 class="text-overflow m-0">{{ "Welcome"|i18n }} !</h6>
+                    </div>
+
+                    <!-- My Profile -->
+                    <a href="{{ basePath }}/Profile/" class="dropdown-item notify-item">
+                        <i class="mdi mdi-account-circle mr-1"></i>
+                        <span>{{ "My Profile"|i18n }}</span>
+                    </a>
+
+                    <!-- User Logout -->
+                    <a href="javascript:common.logout();" class="dropdown-item notify-item">
+                        <i class="mdi mdi-logout mr-1"></i>
+                        <span>{{ "Logout"|i18n }}</span>
+                    </a>
+
+                </div>
+            </li>
+
+        </ul>
+        <a class="button-menu-mobile disable-btn">
+            <div class="lines">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </a>
+        <!-- End Header -->
+    {% endblock %}
+{% endembed %}

@@ -1,0 +1,175 @@
+{% extends "Layout/Main.twig" %}
+
+{% block content %}
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="d-flex align-items-center">
+            <div class="mr-auto">
+                <h3 class="page-title">{{ "My Profile" | i18n }}</h3>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">{{ 'Profile Details' | i18n }}</h4>
+                        <div class="list-group">
+                            <div class="list-group-item list-group-item-action bb-1 bb-dashed border-light media-list-divided media-list-hover">
+                                <div class="d-flex align-items-center" data-toggle="modal" data-target="#profile-edit">
+                                    <p class="mb-0 col-3 col-md-2">{{ "Username" | i18n }} </p>
+                                    <p class="mb-0 col-9 col-md-10">{{ admin.user }}</p>
+                                </div>
+                            </div>
+                            <div class="list-group-item list-group-item-action bb-1 bb-dashed border-light media-list-divided media-list-hover">
+                                <div class="d-flex align-items-center" data-toggle="modal" data-target="div#changeName">
+                                    <p class="mb-0 col-3 col-md-2">{{ "Name" | i18n }} </p>
+                                    <p class="mb-0 col-6 col-md-8">{{ admin.name }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-md-flex justify-content-between align-items-center">
+                            <div>
+                                <h5 class="text-primary font-weight-500">{{ 'Change Password' | i18n }}</h5>
+                                <p class="mb-0">{{ 'Set a unique password to protect your account.' | i18n }}</p>
+                            </div>
+                            <button class="btn btn btn-info" type="button" data-toggle="modal"
+                                    data-target="div#changePassword">{{ 'Change Password' | i18n }}</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="changePassword" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog"
+             aria-labelledby="myLargeModalLabel" style="display: none;" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title"
+                            id="myLargeModalLabel">{{ 'Change Password' | i18n }}：</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                            ×
+                        </button>
+                    </div>
+                    <div class="modal-body form-element">
+                        <div class="form-group row">
+                            <label for="inputOld"
+                                   class="col-sm-5 control-label">{{ 'Current password' | i18n }}
+                                ：</label>
+                            <div class="col-sm-12">
+                                <input type="password" class="form-control" id="inputOld"
+                                       name="oldpsw"
+                                       placeholder="{{ "Please enter your old password" | i18n }}">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="inputNew"
+                                   class="col-sm-5 control-label">{{ 'New password' | i18n }}
+                                ：</label>
+                            <div class="col-sm-12">
+                                <input type="password" class="form-control" id="inputNew"
+                                       name="newpsw"
+                                       placeholder="{{ "Please enter your new password" | i18n }}">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="inputConfirm"
+                                   class="col-sm-5 control-label">{{ 'Confirm password' | i18n }}
+                                ：</label>
+                            <div class="col-sm-12">
+                                <input type="password" class="form-control" id="inputConfirm"
+                                       name="confirmpsw"
+                                       placeholder="{{ "Please enter confirm password" | i18n }}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-success"
+                                onclick="submitForm('password')"> {{ 'Submit' | i18n }}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="changeName" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog"
+             aria-labelledby="myLargeModalLabel" style="display: none;" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title"
+                            id="myLargeModalLabel">{{ 'Change Name' | i18n }}：</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                            ×
+                        </button>
+                    </div>
+                    <div class="modal-body form-element">
+                        <div class="form-group row">
+                            <label for="name"
+                                   class="col-sm-5 control-label">{{ 'Change Name' | i18n }}
+                                ：</label>
+                            <div class="col-sm-12">
+                                <input type="text" class="form-control" id="name" name="name" value="{{ admin.name }}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-success"
+                                onclick="submitForm('name')"> {{ 'Submit' | i18n }}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- /.content -->
+{% endblock %}
+
+{% block script %}
+    <script>
+        function submitForm(action) {
+            var submitData = {};
+            switch (action) {
+                case 'name':
+                    submitData = {
+                        "action": action,
+                        "name": $("input#name").val(),
+                    };
+                    break;
+
+                case 'password':
+                    submitData = {
+                        "action": action,
+                        "oldpsw": $("#inputOld").val(),
+                        "newpsw": $("#inputNew").val(),
+                        'cfmpsw': $("#inputConfirm").val(),
+                    };
+                    if (submitData.newpsw !== submitData.cfmpsw) {
+                        $('input#inputOld').val('').focus();
+                        $('input#inputConfirm').val('');
+                        $('input#inputNew').val('');
+                        dialog.danger("{{ "Message"|i18n }}",
+                            "{{ 'confirmpass_nomatch' |i18n }}");
+                        return;
+                    }
+                    break;
+            }
+
+            common.showWait();
+            common.post('{{ basePath }}/Profile/', submitData,
+                function () {
+                    common.hideWait();
+                    dialog.success("{{ "Message"|i18n }}",
+                        "{{ 'Update profile success' |i18n }}", function () {
+                            common.reload();
+                        });
+                }, function () {
+                    common.hideWait();
+                });
+        }
+    </script>
+{% endblock %}

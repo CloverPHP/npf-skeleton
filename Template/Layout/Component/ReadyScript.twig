@@ -1,0 +1,126 @@
+<script>
+    var
+        dialog = new Dialog('{{ mediaSource }}', '{{ "Close"|i18n }}', '{{ "Ok"|i18n }}', '{{ "Cancel"|i18n }}'),
+        common = new Common(),
+        openWindowName = 'jxlibrary_detail',
+        openWindowOption = 'lefrt=0,top=0,location=0,memubar=0,status=0,titlebar=0,toolbar=0',
+        datePickerLocale = {
+            format: "MM/DD/YYYY",
+            separator: " - ",
+            applyLabel: "{{ 'Apply' | i18n }}",
+            cancelLabel: "{{ 'Cancel' | i18n }}",
+            fromLabel: "{{ 'From' | i18n }}",
+            toLabel: "{{ 'To' | i18n }}",
+            customRangeLabel: "{{ 'Custom Range' | i18n }}",
+            daysOfWeek: [
+                "{{ 'Su' | i18n }}",
+                "{{ 'Mo' | i18n }}",
+                "{{ 'Tu' | i18n }}",
+                "{{ 'We' | i18n }}",
+                "{{ 'Th' | i18n }}",
+                "{{ 'Fr' | i18n }}",
+                "{{ 'Sa' | i18n }}"
+            ],
+            monthNames: [
+                "{{ 'January' | i18n }}",
+                "{{ 'February' | i18n }}",
+                "{{ 'March' | i18n }}",
+                "{{ 'April' | i18n }}",
+                "{{ 'May' | i18n }}",
+                "{{ 'June' | i18n }}",
+                "{{ 'July' | i18n }}",
+                "{{ 'August' | i18n }}",
+                "{{ 'September' | i18n }}",
+                "{{ 'October' | i18n }}",
+                "{{ 'November' | i18n }}",
+                "{{ 'December' | i18n }}"
+            ],
+            firstDay: 1
+        },
+        dateRanges = {
+            minimal: {
+                '{{ "Today" | i18n }}': [moment(), moment()],
+                '{{ "Yesterday" | i18n }}': [moment().subtract(1, 'days'), moment().subtract(1, 'days')]
+            },
+            normal: {
+                '{{ "Today" | i18n }}': [moment(), moment()],
+                '{{ "Yesterday" | i18n }}': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                '{{ "Last 7 Days" | i18n }}': [moment().subtract(7, 'days'), moment()],
+                '{{ "Last 30 Days" | i18n }}': [moment().subtract(30, 'days'), moment()],
+                '{{ "This Month" | i18n }}': [moment().startOf('month'), moment().endOf('month')],
+                '{{ "Last Month" | i18n }}': [moment().subtract(1, 'months').startOf('month'), moment().subtract(1, 'months').endOf('month')],
+                '{{ "This Year" | i18n }}': [moment().startOf('year'), moment().endOf('year')],
+                '{{ "Last Year" | i18n }}': [moment().subtract(1, 'year').startOf('year'), moment().subtract(1, 'year').endOf('year')]
+            }
+        };
+    ;
+
+    $(document).ready(function () {
+
+        if ('serviceWorker' in navigator)
+            navigator.serviceWorker.register('/service-worker.js');
+
+        $('select').each(function () {
+            var width = $(this).data('width'),
+                fontSize = $(this).css('font-size'),
+                lineHeight = Math.floor(parseInt(fontSize.replace('px', '')) * 1.5),
+                thumbBase = $(this).data('thumb-base'),
+                params = {
+                    language: {
+                        noResults: function () {
+                            return "{{ 'No Results Found'|i18n }}";
+                        }
+                    },
+                    minimumResultsForSearch: $(this).data('min-search'),
+                    placeholder: $(this).data('placeholder'),
+                    allowClear: Boolean($(this).data('allow-clear')),
+                    templateResult: function (selection) {
+                        if (!selection.id)
+                            return selection.text;
+                        var thumb = $(selection.element).data('thumb');
+                        thumbBase = typeof (thumbBase) === 'undefined' ? '' : thumbBase;
+                        if (!thumb)
+                            return selection.text;
+                        else
+                            return $(
+                                '<span style="white-space: nowrap;"><img crossorigin="anonymous" src="' + thumbBase + thumb + '" alt="" style="height: ' + lineHeight + 'px">' + $(selection.element).text() + '</span>'
+                            );
+                    }
+                };
+            if (typeof (width) !== 'undefined')
+                params.width = width;
+            else
+                params.width = '100%';
+            $(this).select2(params);
+        });
+
+        $('input.custom-file-input[type="file"]').on('change', function () {
+            //replace the original label
+            $(this).next('.custom-file-label').html($(this).val().split('\\').pop()).addClass('text-primary font-weight-bolder');
+        });
+
+        $('input.form-control[maxlength]').maxlength();
+        $('textarea.form-control[maxlength]').maxlength();
+
+        {% if errorMessage %}
+        dialog.danger('{{ "Error"|i18n }}', '{{ errorMessage }}');
+        {% endif %}
+        {% if successMessage %}
+        dialog.success('{{ "Success"|i18n }}', '{{ successMessage }}');
+        {% endif %}
+        {% if warningMessage %}
+        dialog.warning('{{ "Warning"|i18n }}', '{{ warningMessage }}');
+        {% endif %}
+        {% if noticeMessage %}
+        dialog.primary('{{ "Notice"|i18n }}', '{{ noticeMessage }}');
+        {% endif %}
+
+        $('a').click(function (e) {
+            e = e || window.event;
+            var element = e.target || e.srcElement, href = element.href.toLowerCase();
+            if (element.tagName === 'A' && element.href && href.substring(0, 1) !== '#' && href.substring(0, 10) !== 'javascript' && $(element).prop('target') === '')
+                common.showWait();
+        });
+
+    });
+</script>

@@ -1,0 +1,20 @@
+<div class="row">
+    <div class="col-12">
+        <form id="search-filter-plugin-form" class="d-print-none" method="post"
+              enctype="application/x-www-form-urlencoded">
+            {% if pagination and pagination.page and pagination.total > 1 %}
+                <input type="hidden" name="_pagination.page_" value="{{ pagination.page }}">
+                <input type="hidden" name="_pagination.total_" value="{{ pagination.total }}">
+            {% endif %}
+            {% block search %}{% endblock %}
+        </form>
+
+        {% include "Layout/Component/Pagination.twig" %}
+
+        {% block content %}{% endblock %}
+
+        {% include "Layout/Component/Pagination.twig" %}
+
+    </div>
+</div>
+<!-- /.content -->

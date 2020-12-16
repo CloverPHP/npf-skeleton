@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" translate="no">
+{% embed "Layout/Component/Head.twig" with { meta: block('meta'), title: block('title'), css:block('css')} %}
+    {% block meta %}
+        {% if meta is not empty %}
+            {{ meta|raw }}
+        {% else %}
+            <meta name="theme-color" content="#343a40">
+            <meta property="og:type" content="website"/>
+            <meta property="og:url" content="{{ app.request.getBaseURL() }}"/>
+            <meta property="og:site_name" content="JxLibrary"/>
+            <meta property="og:image" itemprop="image primaryImageOfPage"
+                  content="{{ imageSource }}/logo/192.png"/>
+        {% endif %}
+    {% endblock %}
+    {% block title %}
+        {% if title is not empty %}
+            {{ title|raw }}
+        {% else %}
+            {{ "Npf Project"|i18n }}
+        {% endif %}
+    {% endblock %}
+
+    {% block css %}
+        {% if css is not empty %}
+            {{ css|raw }}
+        {% endif %}
+    {% endblock %}
+
+{% endembed %}
+<body class="loading" data-layout="detached">
+<!-- Start Content-->
+<div class="container-fluid">
+
+    <!-- Begin page -->
+    <div class="wrapper">
+        <div class="content-page">
+            {% block content %}{% endblock %}
+        </div> <!-- content-page -->
+    </div> <!-- end wrapper-->
+</div>
+<!-- END Container -->
+
+{% include "Layout/Component/Script.twig" %}
+{% block script %}{% endblock %}
+</body>
+</html>

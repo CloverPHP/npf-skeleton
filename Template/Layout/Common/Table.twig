@@ -1,0 +1,51 @@
+<div class="row">
+    <div class="col-12">
+        <form id="search-filter-plugin-form" class="d-print-none mb-1" method="post"
+              enctype="application/x-www-form-urlencoded">
+            {% if pagination and pagination.page and pagination.total > 1 %}
+                <input type="hidden" name="_pagination.page_" value="{{ pagination.page }}">
+                <input type="hidden" name="_pagination.total_" value="{{ pagination.total }}">
+                <input type="hidden" name="_pagination.size_" value="{{ pagination.size }}">
+            {% endif %}
+            {% block search %}{% endblock %}
+        </form>
+        {% if lists %}
+
+            {% include "Layout/Component/Pagination.twig" %}
+
+            <table class="table table-hover no-wrap" role="grid">
+
+                <thead>
+                    {% block thead %}{% endblock %}
+                </thead>
+
+                <tbody>
+                {% block tbody %}{% endblock %}
+                </tbody>
+
+                <tfoot>
+                {% block tfoot %}{% endblock %}
+                </tfoot>
+            </table>
+
+            {% include "Layout/Component/Pagination.twig" %}
+
+        {% else %}
+            <div class="row">
+                <div class="col-12 col-md-8">
+                    <div class="card d-print-none">
+                        <div class="card-header">
+                            <div class="card-title">
+                                {% block noResultTitle %}<h3>{{ "Table is clean"|i18n }}</h3>{% endblock %}
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            {% block noResultContent %} <p>{{ "Currently did not have any data."|i18n }}</p>{% endblock %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</div>
+<!-- /.content -->

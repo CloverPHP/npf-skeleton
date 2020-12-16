@@ -1,0 +1,25 @@
+{% extends "Layout/Auth.twig" %}
+
+{% block title %}Master Admin - 404 {{ "Page not found"|i18n }}{% endblock %}
+{% block content %}
+    <div class="text-center">
+        <h1 class="text-error">4<i class="mdi mdi-emoticon-sad"></i>3</h1>
+        <h4 class="text-uppercase text-danger mt-3">{{ "Permission Denied"|i18n }}</h4>
+        <p class="text-muted mt-3">
+            {{ "Ops, look like you have not permission." | i18n }}
+        </p>
+        <a id="back" class="btn btn-info mt-3" href="#">
+            <i class="mdi mdi-reply"></i>{{ "Back"|i18n }}
+        </a>
+    </div>
+{% endblock %}
+{% block script %}
+    <script>
+        $('a#back').click(function () {
+            if (history.length > 0)
+                history.back();
+            else
+                window.location.href = '/';
+        });
+    </script>
+{% endblock %}
