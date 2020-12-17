@@ -1,6 +1,6 @@
 {% extends "Layout/Auth.twig" %}
 
-{% block title %}Accounting - {{ "Login"|i18n }}{% endblock %}
+{% block title %}{{ title|default('Npf Project') }} - {{ "Login"|i18n }}{% endblock %}
 {% block content %}
     <div class="text-center w-75 m-auto">
         <h4 class="text-dark-50 text-center mt-0 font-weight-bold text-uppercase">{{ "Sign In"|i18n }}</h4>
