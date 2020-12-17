@@ -5,7 +5,6 @@ namespace Module\Admin;
 use Exception\LoginRequired;
 use Exception\ObjectMismatch;
 use Npf\Exception\DBQueryError;
-use Npf\Exception\InvalidParams;
 
 /**
  * Class Menu

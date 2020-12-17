@@ -4,7 +4,6 @@ namespace Module\Admin\Auth;
 
 use Exception\InvalidLogin;
 use Exception\LoginRequired;
-use Npf\Core\Common;
 use Npf\Exception\DBQueryError;
 use Npf\Exception\InternalError;
 use ReflectionException;

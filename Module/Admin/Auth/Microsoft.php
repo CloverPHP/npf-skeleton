@@ -4,7 +4,6 @@ namespace Module\Admin\Auth;
 
 use Exception\InvalidLogin;
 use Exception\LoginRequired;
-use Npf\Core\Common;
 use Npf\Exception\DBQueryError;
 use Npf\Exception\InternalError;
 
@@ -32,10 +31,9 @@ class Microsoft extends Base
 
     /**
      * @param $code
-     * @return mixed
+     * @return array|false
      * @throws DBQueryError
      * @throws InternalError
-     * @throws InvalidLogin
      */
     final public function login($code)
     {
@@ -43,6 +41,7 @@ class Microsoft extends Base
         $oauthUser = $this->module->OAuth->Microsoft->getUserInfo($token['id_token']);
         $adminId = $this->module->Model->OAuthConnect->getByParty('microsoft', $oauthUser['id']);
         if (!$admin = $this->model->AdminManager->get($adminId))
-        return $this->auth->prepare($admin);
+            return $this->auth->prepare($admin);
+        return false;
     }
 }

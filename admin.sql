@@ -102,4 +102,16 @@ CREATE TABLE `admin_role`  (
   PRIMARY KEY (`admin_role_id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
+CREATE TABLE `oauth_connect` (
+  `oauth_connect_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `oauth_connect_roleid` bigint(20) unsigned NOT NULL DEFAULT '0',
+  `oauth_connect_service` varchar(20) NOT NULL,
+  `oauth_connect_serviceid` varchar(50) NOT NULL,
+  `oauth_connect_created` datetime NOT NULL,
+  `oauth_connect_createdts` bigint(20) NOT NULL,
+  PRIMARY KEY (`oauth_connect_id`) USING BTREE,
+  UNIQUE KEY `idx_oauth_service` (`oauth_connect_service`,`oauth_connect_serviceid`) USING BTREE,
+  UNIQUE KEY `idx_oauth_role` (`oauth_connect_roleid`,`oauth_connect_service`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
+
 SET FOREIGN_KEY_CHECKS = 1;

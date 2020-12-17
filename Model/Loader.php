@@ -13,30 +13,7 @@ use Npf\Exception\InternalError;
  * @property AdminMenu $AdminMenu
  * @property AdminRole $AdminRole
  * @property AdminLogin $AdminLogin
- * @property BillingInvoice $BillingInvoice
- * @property BillingInvoiceItem $BillingInvoiceItem
- * @property BillingQuotation $BillingQuotation
- * @property BillingQuotationItem $BillingQuotationItem
- * @property BillingPO $BillingPO
- * @property BillingPOItem $BillingPOItem
- * @property GalleryPath $GalleryPath
- * @property GalleryPhoto $GalleryPhoto
- * @property ProfileCompany $ProfileCompany
- * @property ProfileCustomer $ProfileCustomer
- * @property ProfileVendor $ProfileVendor
- * @property AccMainLedger $AccMainLedger
- * @property AccSubLedger $AccSubLedger
- * @property AccTrx $AccTrx
- * @property AccPostedMonth $AccPostedMonth
- * @property AccSummary $AccSummary
- * @property Setting $Setting
- * @property StockItem $StockItem
- * @property StockIn $StockIn
- * @property StockOut $StockOut
- * @property StockStatistics $StockStatistics
  * @property OAuthConnect $OAuthConnect
- * @property VehicleCar $VehicleCar
- * @property VehiclePetrol $VehiclePetrol
  */
 final class Loader extends Model
 {

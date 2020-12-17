@@ -339,6 +339,16 @@ abstract class Base
             $this->app->response->set($name, $response);
     }
 
+    /**
+     * @param $dir
+     * @param array $results
+     * @return array
+     */
+    /**
+     * @param $dir
+     * @param array $results
+     * @return array
+     */
     protected function searchPhpFiles($dir, &$results = array())
     {
         $files = scandir($dir);

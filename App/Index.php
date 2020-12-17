@@ -18,8 +18,6 @@ final class Index extends Base
      * @param App $app
      * @param Module $module
      * @return void
-     * @throws InternalError
-     * @throws InvalidParams
      */
     final public function __invoke(App &$app, Module &$module)
     {
