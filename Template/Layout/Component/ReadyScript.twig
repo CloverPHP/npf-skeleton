@@ -117,9 +117,12 @@
 
         $('a').click(function (e) {
             e = e || window.event;
-            var element = e.target || e.srcElement, href = element.href.toLowerCase();
-            if (element.tagName === 'A' && element.href && href.substring(0, 1) !== '#' && href.substring(0, 10) !== 'javascript' && $(element).prop('target') === '')
-                common.showWait();
+            var element = e.target || e.srcElement, href = $(element).attr('href');
+            if(typeof(href) === 'string') {
+                href.toLowerCase();
+                if (element.tagName === 'A' && element.href && href.substring(0, 1) !== '#' && href.substring(0, 10) !== 'javascript' && $(element).prop('target') === '')
+                    common.showWait();
+            }
         });
 
     });

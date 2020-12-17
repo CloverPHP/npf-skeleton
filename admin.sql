@@ -5,13 +5,13 @@
  Source Server Type    : MySQL
  Source Server Version : 50726
  Source Host           : 127.0.0.1:3306
- Source Schema         : own_app
+ Source Schema         : npf_project
 
  Target Server Type    : MySQL
  Target Server Version : 50726
  File Encoding         : 65001
 
- Date: 17/12/2020 00:04:27
+ Date: 17/12/2020 17:08:38
 */
 
 SET NAMES utf8mb4;
@@ -24,11 +24,11 @@ DROP TABLE IF EXISTS `admin_login`;
 CREATE TABLE `admin_login`  (
   `admin_login_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
   `admin_login_adminid` bigint(20) UNSIGNED NOT NULL DEFAULT 0,
-  `admin_login_source` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `admin_login_source` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'login',
   `admin_login_useragent` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `admin_login_browser` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `admin_login_platform` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `admin_login_ip` bigint(32) NOT NULL DEFAULT 0,
+  `admin_login_ip` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '',
   `admin_login_created` datetime(0) NOT NULL,
   PRIMARY KEY (`admin_login_id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
@@ -57,7 +57,7 @@ CREATE TABLE `admin_manager`  (
 -- ----------------------------
 -- Records of admin_manager
 -- ----------------------------
-INSERT INTO `admin_manager` VALUES (1, 'admin', 'cd5ea73cd58f827fa78eef7197b8ee606c99b2e6', 'Administrator', 'main', 1, 1, 0, 0, '2020-11-09 18:24:18', '2020-10-30 00:45:51');
+INSERT INTO `admin_manager` VALUES (1, 'admin', 'cd5ea73cd58f827fa78eef7197b8ee606c99b2e6', 'Administrator', 'main', 0, 1, 0, 0, '2020-12-17 16:46:10', '2020-10-30 00:45:51');
 
 -- ----------------------------
 -- Table structure for admin_menu
@@ -84,6 +84,7 @@ INSERT INTO `admin_menu` VALUES (3, 2, 'Admin', 1, 1.0, 'uil-user', '', 1);
 INSERT INTO `admin_menu` VALUES (4, 3, 'Admin Manager', 2, 1.0, 'uil-user', '/Admin/Manager/Index', 1);
 INSERT INTO `admin_menu` VALUES (5, 3, 'Admin Menus', 2, 2.0, 'uil-user', '/Admin/Menus/Index', 1);
 INSERT INTO `admin_menu` VALUES (6, 3, 'Admin Roles', 2, 3.0, 'uil-user', '/Admin/Roles/Index', 1);
+
 -- ----------------------------
 -- Table structure for admin_role
 -- ----------------------------
@@ -102,16 +103,20 @@ CREATE TABLE `admin_role`  (
   PRIMARY KEY (`admin_role_id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
-CREATE TABLE `oauth_connect` (
-  `oauth_connect_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `oauth_connect_roleid` bigint(20) unsigned NOT NULL DEFAULT '0',
-  `oauth_connect_service` varchar(20) NOT NULL,
-  `oauth_connect_serviceid` varchar(50) NOT NULL,
-  `oauth_connect_created` datetime NOT NULL,
+-- ----------------------------
+-- Table structure for oauth_connect
+-- ----------------------------
+DROP TABLE IF EXISTS `oauth_connect`;
+CREATE TABLE `oauth_connect`  (
+  `oauth_connect_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `oauth_connect_roleid` bigint(20) UNSIGNED NOT NULL DEFAULT 0,
+  `oauth_connect_service` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `oauth_connect_serviceid` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `oauth_connect_created` datetime(0) NOT NULL,
   `oauth_connect_createdts` bigint(20) NOT NULL,
   PRIMARY KEY (`oauth_connect_id`) USING BTREE,
-  UNIQUE KEY `idx_oauth_service` (`oauth_connect_service`,`oauth_connect_serviceid`) USING BTREE,
-  UNIQUE KEY `idx_oauth_role` (`oauth_connect_roleid`,`oauth_connect_service`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
+  UNIQUE INDEX `idx_oauth_service`(`oauth_connect_service`, `oauth_connect_serviceid`) USING BTREE,
+  UNIQUE INDEX `idx_oauth_role`(`oauth_connect_roleid`, `oauth_connect_service`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 SET FOREIGN_KEY_CHECKS = 1;
