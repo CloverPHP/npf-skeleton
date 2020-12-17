@@ -5,6 +5,7 @@
 <!-- third party js -->
 <script crossorigin="anonymous" src="{{ mediaSource }}/js/bootstrap-maxlength.min.js"></script>
 <script crossorigin="anonymous" src="{{ mediaSource }}/js/waitMe.min.js"></script>
+<script crossorigin="anonymous" src="{{ mediaSource }}/js/dialog.js"></script>
 <script crossorigin="anonymous" src="{{ mediaSource }}/js/facebook.js"></script>
 <script crossorigin="anonymous" src="{{ mediaSource }}/js/search-filter-plugin.js"></script>
 
@@ -27,13 +28,19 @@
         return result;
     };
 
-    Common.prototype.currencyFormat = function (amount, decimalCount = 2, decimal = ".", thousands = ",") {
+    Common.prototype.currencyFormat = function (amount, decimalCount, decimal, thousands) {
         try {
+            if(typeof(decimalCount) === "undefined")
+                decimalCount = 2;
+            if(typeof(decimal) === "undefined")
+                decimalCount = '.';
+            if(typeof(thousands) === "undefined")
+                thousands = ',';
             decimalCount = Math.abs(decimalCount);
             decimalCount = isNaN(decimalCount) ? 2 : decimalCount;
             const negativeSign = amount < 0 ? "-" : "";
-            let i = parseInt(amount = Math.abs(Number(amount) || 0).toFixed(decimalCount)).toString();
-            let j = (i.length > 3) ? i.length % 3 : 0;
+            var i = parseInt(amount = Math.abs(Number(amount) || 0).toFixed(decimalCount)).toString();
+            var j = (i.length > 3) ? i.length % 3 : 0;
             return negativeSign + (j ? i.substr(0, j) + thousands : '') + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + thousands) + (decimalCount ? decimal + Math.abs(amount - i).toFixed(decimalCount).slice(2) : "");
         } catch (e) {
             return amount;
@@ -62,7 +69,7 @@
     };
 
     Common.prototype.notice = function (icon, title, content, afterHide) {
-        let option = {
+        var option = {
             heading: title,
             text: content,
             showHideTransition: 'slide',
@@ -232,7 +239,7 @@
             location.reload();
     };
 
-    window.addEventListener('beforeinstallprompt', (e) => {
+    window.addEventListener('beforeinstallprompt', function (e) {
         e.preventDefault();
         // Stash the event so it can be triggered later.
         var deferredPrompt = e;
@@ -241,7 +248,7 @@
             // Show the prompt
             deferredPrompt.prompt();
             // Wait for the user to respond to the prompt
-            deferredPrompt.userChoice.then((choiceResult) => {
+            deferredPrompt.userChoice.then(function (choiceResult) {
                 if (choiceResult.outcome === 'accepted')
                     $('li#add2Home').addClass('d-none');
                 deferredPrompt = null;
