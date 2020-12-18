@@ -14,7 +14,8 @@ final class I18n extends AbstractExtension
     private $lang = '';
 
     private $languages = [
-        'zhHans' => '中文',
+        'zhHant' => '中文繁體',
+        'zhHans' => '中文简体',
         'en' => 'English',
     ];
 

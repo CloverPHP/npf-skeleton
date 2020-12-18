@@ -153,7 +153,7 @@ abstract class Base
         $app->session->start();
 
         //Setup Language
-        $this->lang = $module->I18n->setLang($app->session->get('lang', 'zhHans'));
+        $this->lang = $module->I18n->setLang($app->session->get('lang', 'en'));
 
         if ($this->admin = $module->Admin->getAdmin(true))
             $app->response->add('logged', true);
