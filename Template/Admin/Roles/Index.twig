@@ -91,29 +91,5 @@
                     $(me).prop("checked", !status);
                 });
         });
-
-        $('a.product-del').click(function (e) {
-            e.preventDefault();
-
-            common.quest('warning',
-                "{{ 'Confirm message'|i18n }}"
-                , "{{ 'Are you sure to delete?'|i18n }}"
-                , function () {
-                    var me = this;
-                    var id = $(me).data('id');
-                    common.showWait();
-                    common.post('{{ basePath }}/Admin/Role/Delete', {id: id}, function () {
-                            common.hideWait();
-                            common.notice('success', "{{ "Message"|i18n }}",
-                                "{{ 'delete success' |i18n }}", function () {
-                                    common.reload();
-                                });
-                        },
-                        function () {
-                            common.hideWait();
-                        });
-                    return false;
-                });
-        });
     </script>
 {% endblock %}
