@@ -5,12 +5,12 @@
 <!-- third party js -->
 <script crossorigin="anonymous" src="{{ mediaSource }}/js/bootstrap-maxlength.min.js"></script>
 <script crossorigin="anonymous" src="{{ mediaSource }}/js/waitMe.min.js"></script>
-<script crossorigin="anonymous" src="{{ mediaSource }}/js/dialog.js"></script>
 <script crossorigin="anonymous" src="{{ mediaSource }}/js/facebook.js"></script>
 <script crossorigin="anonymous" src="{{ mediaSource }}/js/search-filter-plugin.js"></script>
 
 <script>
     function Common() {
+        this.toast = [];
     }
 
     Common.prototype.random = function (min, max) {
@@ -30,11 +30,11 @@
 
     Common.prototype.currencyFormat = function (amount, decimalCount, decimal, thousands) {
         try {
-            if(typeof(decimalCount) === "undefined")
+            if (typeof (decimalCount) === "undefined")
                 decimalCount = 2;
-            if(typeof(decimal) === "undefined")
+            if (typeof (decimal) === "undefined")
                 decimalCount = '.';
-            if(typeof(thousands) === "undefined")
+            if (typeof (thousands) === "undefined")
                 thousands = ',';
             decimalCount = Math.abs(decimalCount);
             decimalCount = isNaN(decimalCount) ? 2 : decimalCount;
@@ -68,21 +68,81 @@
         form.submit().remove();
     };
 
-    Common.prototype.notice = function (icon, title, content, afterHide) {
+    Common.prototype.notice = function (type, title, content, onHide) {
+        type = jQuery.inArray(type, ['info', 'warning', 'error', 'success']) >= 0 ? type : '';
+        var position = 'top-right';
+        switch (type) {
+            case 'error':
+                position = 'bottom-center';
+                break;
+            case 'warning':
+                position = 'top-center';
+                break;
+            case 'success':
+                position = 'bottom-right';
+                break;
+        }
         var option = {
             heading: title,
             text: content,
             showHideTransition: 'slide',
-            position: 'top-right',
+            position: position,
             hideAfter: 5000,
-            stack: 10,
-            icon: jQuery.inArray(icon, ['info', 'warning', 'error', 'success']) >= 0 ? icon : 'info',
-            afterHidden: afterHide
+            stack: 10
         };
-        if (typeof (afterHide) === 'function')
-            option['afterHide'] = afterHide;
-        $.toast(option)
+        if (type !== '')
+            option['icon'] = type;
+        if (typeof (onHide) === 'function')
+            option['afterHide'] = onHide;
+        $.toast(option);
+    };
 
+    Common.prototype.questHide = function (elem, type) {
+        var id = $(elem).data('id');
+        if (id !== '' && this.toast.hasOwnProperty(id)) {
+            this.toast[id].toast.reset();
+            if (this.toast[id].hasOwnProperty(type) && typeof (this.toast[id][type]) === 'function')
+                this.toast[id][type]();
+            delete (this.toast[id]);
+        }
+    };
+
+    Common.prototype.quest = function (type, title, content, onOk, onHide) {
+        type = jQuery.inArray(type, ['info', 'warning', 'error', 'success']) >= 0 ? type : '';
+        var id = common.genCode(16), position = 'mid-center';
+        switch (type) {
+            case 'error':
+                position = 'bottom-center';
+                break;
+            case 'warning':
+                position = 'top-center';
+                break;
+            case 'success':
+                position = 'bottom-right';
+                break;
+        }
+        var option = {
+            heading: title,
+            text: content +
+                '<div>&nbsp;</div>' +
+                '<p>' +
+                '<a href="#" class="mr-1" data-id="' + id + '" onclick="common.questHide(this, \'ok\');">{{ "Ok"|i18n }}</a>' +
+                '<a href="#" class="ml-1" data-id="' + id + '" onclick="common.questHide(this, \'cancel\');"">{{ "Cancel"|i18n }}</a>' +
+                '</p>',
+            showHideTransition: 'slide',
+            position: position,
+            hideAfter: 30000,
+            stack: false
+        };
+        if (type !== '')
+            option['icon'] = type;
+        if (typeof (onHide) === 'function')
+            option['afterHide'] = onHide;
+        this.toast[id] = {
+            toast: $.toast(option),
+            ok: onOk,
+            cancel: onHide
+        }
     };
 
     Common.prototype.response = function (response, success, error, always, textStatus, request) {
@@ -212,7 +272,7 @@
         var me = this;
         me.showWait();
         me.post('{{ basePath }}/Index', {
-            lang: lang,
+            lang: lang
         }, function () {
             me.reload();
         }, function () {
@@ -244,7 +304,7 @@
         // Stash the event so it can be triggered later.
         var deferredPrompt = e;
         $('li#add2Home').removeClass('d-none');
-        $('a#add2HomeBtn').click(function (e) {
+        $('a#add2HomeBtn').click(function () {
             // Show the prompt
             deferredPrompt.prompt();
             // Wait for the user to respond to the prompt

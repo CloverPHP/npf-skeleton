@@ -137,7 +137,7 @@
                 case 'name':
                     submitData = {
                         "action": action,
-                        "name": $("input#name").val(),
+                        "name": $("input#name").val()
                     };
                     break;
 
@@ -146,13 +146,13 @@
                         "action": action,
                         "oldpsw": $("#inputOld").val(),
                         "newpsw": $("#inputNew").val(),
-                        'cfmpsw': $("#inputConfirm").val(),
+                        'cfmpsw': $("#inputConfirm").val()
                     };
                     if (submitData.newpsw !== submitData.cfmpsw) {
                         $('input#inputOld').val('').focus();
                         $('input#inputConfirm').val('');
                         $('input#inputNew').val('');
-                        dialog.danger("{{ "Message"|i18n }}",
+                        common.notice('error', "{{ "Message"|i18n }}",
                             "{{ 'confirmpass_nomatch' |i18n }}");
                         return;
                     }
@@ -163,7 +163,7 @@
             common.post('{{ basePath }}/Profile/', submitData,
                 function () {
                     common.hideWait();
-                    dialog.success("{{ "Message"|i18n }}",
+                    common.notice('success', "{{ "Message"|i18n }}",
                         "{{ 'Update profile success' |i18n }}", function () {
                             common.reload();
                         });

@@ -1,6 +1,5 @@
 <script>
     var
-        dialog = new Dialog('{{ mediaSource }}', '{{ "Close"|i18n }}', '{{ "Ok"|i18n }}', '{{ "Cancel"|i18n }}'),
         common = new Common(),
         openWindowName = 'jxlibrary_detail',
         openWindowOption = 'lefrt=0,top=0,location=0,memubar=0,status=0,titlebar=0,toolbar=0',
@@ -53,7 +52,6 @@
                 '{{ "Last Year" | i18n }}': [moment().subtract(1, 'year').startOf('year'), moment().subtract(1, 'year').endOf('year')]
             }
         };
-    ;
 
     $(document).ready(function () {
 
@@ -103,16 +101,16 @@
         $('textarea.form-control[maxlength]').maxlength();
 
         {% if errorMessage %}
-        dialog.danger('{{ "Error"|i18n }}', '{{ errorMessage }}');
+        common.notice('error', '{{ "Error"|i18n }}', '{{ errorMessage }}');
         {% endif %}
         {% if successMessage %}
-        dialog.success('{{ "Success"|i18n }}', '{{ successMessage }}');
+        common.notice('success', '{{ "Success"|i18n }}', '{{ successMessage }}');
         {% endif %}
         {% if warningMessage %}
-        dialog.warning('{{ "Warning"|i18n }}', '{{ warningMessage }}');
+        common.notice('warning', '{{ "Warning"|i18n }}', '{{ warningMessage }}');
         {% endif %}
         {% if noticeMessage %}
-        dialog.primary('{{ "Notice"|i18n }}', '{{ noticeMessage }}');
+        common.notice('info', '{{ "Notice"|i18n }}', '{{ noticeMessage }}');
         {% endif %}
 
         $('a').click(function (e) {

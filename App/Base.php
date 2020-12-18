@@ -115,7 +115,7 @@ abstract class Base
                 $app->redirect($referer);
             } elseif (!$app->request->isXHR()) {
                 $this->viewTwig();
-            }else
+            } else
                 $this->viewJson();
         });
 
@@ -327,7 +327,8 @@ abstract class Base
      */
     final public function outputTwig($responses = [])
     {
-        $this->app->response->add('panelMenus', $this->module->Admin->Menu->getMenus());
+        if (!empty($this->admin))
+            $this->app->response->add('panelMenus', $this->module->Admin->Menu->getMenus());
         $this->app->response->set('basePath', $this->basePath);
         $this->app->response->set('lang', $this->lang);
         $this->app->response->set('allLang', $this->langMap);
@@ -339,11 +340,6 @@ abstract class Base
             $this->app->response->set($name, $response);
     }
 
-    /**
-     * @param $dir
-     * @param array $results
-     * @return array
-     */
     /**
      * @param $dir
      * @param array $results

@@ -95,7 +95,7 @@
         $('a.product-del').click(function (e) {
             e.preventDefault();
 
-            dialog.warningQuest(
+            common.quest('warning',
                 "{{ 'Confirm message'|i18n }}"
                 , "{{ 'Are you sure to delete?'|i18n }}"
                 , function () {
@@ -104,7 +104,7 @@
                     common.showWait();
                     common.post('{{ basePath }}/Admin/Role/Delete', {id: id}, function () {
                             common.hideWait();
-                            dialog.success("{{ "Message"|i18n }}",
+                            common.notice('success', "{{ "Message"|i18n }}",
                                 "{{ 'delete success' |i18n }}", function () {
                                     common.reload();
                                 });
