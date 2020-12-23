@@ -6,6 +6,10 @@ use Exception\InvalidLogin;
 use Exception\LoginRequired;
 use Npf\Exception\DBQueryError;
 use Npf\Exception\InternalError;
+use ReflectionException;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
 /**
  * Class Microsoft
@@ -34,6 +38,10 @@ class Microsoft extends Base
      * @return array|false
      * @throws DBQueryError
      * @throws InternalError
+     * @throws ReflectionException
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     final public function login($code)
     {
@@ -42,6 +50,7 @@ class Microsoft extends Base
         $adminId = $this->module->Model->OAuthConnect->getByParty('microsoft', $oauthUser['id']);
         if (!$admin = $this->model->AdminManager->get($adminId))
             return $this->auth->prepare($admin);
+        $this->auth->auth2FA($admin);
         return false;
     }
 }

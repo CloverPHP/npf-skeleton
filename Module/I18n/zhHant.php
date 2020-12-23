@@ -43,15 +43,11 @@ final class zhHant
             'Indian' => '印度文',
             'Other' => '其他',
             'Category' => '分類',
-            'Book' => '書本',
             'Title' => '標題',
             'Remark' => '備註',
             'Identifier' => '識別碼',
             'No Results Found' => '找不到任何結果',
             'Member' => '會員',
-            'Member Identifier' => '會員識別碼',
-            'Book Identifier' => '書本識別碼',
-            'Book/Member Identifier' => '書本/會員 識別碼',
             'Page' => '頁面',
             'of' => '至',
             'Welcome' => '歡迎',
@@ -68,6 +64,8 @@ final class zhHant
             'Address' => '地址',
             'Create Time' => '建立時間',
             'Please select one' => '請選擇壹個',
+            'Enabled' => '已啓用',
+            'Disabled' => '已停用',
 
             //Date Component
             'Year' => '年份',
@@ -131,6 +129,7 @@ final class zhHant
             'Success message' => '成功訊息',
             'Confirm message' => '確認訊息',
             'Table is clean' => '暫無數據',
+            'Are you sure want do this?' => '你確定要这样做嗎？',
             'Currently did not have any data.' => '目前沒有任何數據。',
             'Page Not Found' => '找不到網頁',
             'Permission Denied' => '沒有權限',
@@ -152,6 +151,7 @@ final class zhHant
             'error_exception' => '抱歉，我們遇到了錯誤，請稍後重試。',
             'db_query_error' => '抱歉，我們遇到了資料庫問題，請稍後重試。',
             'image_not_supported' => '抱歉，該圖片不支持/損壞，我們僅支持jpg，png，bmp，gif。',
+            'auth_2step_factor'=>'抱歉，雙因素驗證碼錯誤，請重試。',
 
             //Admin Manager
             'Manager List' => '管理員列表',
@@ -208,6 +208,20 @@ final class zhHant
             'Password' => '密碼',
             'Remember Me' => '記得我',
             'Enter your user name and password to continue.' => '輸入用戶名和密碼以繼續。',
+
+            //Two-Factor Authentication
+            'Two-Factor Authentication' => '雙因素認證',
+            'Enter the code from the two-factor app on your mobile device. If you\'ve lost your device, you may need to contact administrator.' => '从移动设备上的雙因素应用程序中输入代码。 如果您丢失了设备，则可能需要联系管理员。',
+            'Two-factor authentication code' => '雙因素验证码',
+            'Verify Code' => '验证码',
+            'Enter Confirmation Code' => '输入确认码',
+            'Another Login' => '另一个登录',
+            'Activate 2FA' => '启用 2FA',
+            'Deactivate 2FA' => '停用 2FA',
+            'Enforce 2FA' => '強制 2FA',
+            'Please enter the confirmation code you see on your authentication app' => '请输入您在身份验证应用上看到的确认码',
+            'Please use your authentication app (such as Duo or Google Authenticator) to scan this QR code.' => '请使用您的身份验证应用（例如Duo或Google Authenticator）扫描此QR码。',
+
 
             //Menu
             'Home' => '主頁',

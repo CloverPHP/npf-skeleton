@@ -6,6 +6,10 @@ use Exception\InvalidLogin;
 use Exception\LoginRequired;
 use Npf\Exception\DBQueryError;
 use Npf\Exception\InternalError;
+use ReflectionException;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
 /**
  * Class Facebook
@@ -19,6 +23,10 @@ class Spotify extends Base
      * @throws DBQueryError
      * @throws InternalError
      * @throws LoginRequired
+     * @throws ReflectionException
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     final public function connect($code)
     {
@@ -26,6 +34,7 @@ class Spotify extends Base
         $oauthUser = $this->module->OAuth->Spotify->getUserInfo($token['access_token']);
         if (!$this->module->Model->OAuthConnect->getByParty('spotify', $oauthUser['id']))
             $this->module->Model->OAuthConnect->create($this->admin->getAdminId(), 'spotify', $oauthUser['id']);
+        $this->auth->auth2FA($admin);
         return $this->auth->prepare($this->admin->getAdmin());
     }
 

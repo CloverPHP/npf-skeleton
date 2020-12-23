@@ -72,6 +72,7 @@
                 <th scope="col">{{ "Username" | i18n }}</th>
                 <th scope="col">{{ "Name" | i18n }}</th>
                 <th scope="col">{{ "Role" | i18n }}</th>
+                <th scope="col">{{ "Two-Factor Authentication" | i18n }}</th>
                 <th scope="col">{{ "Status" | i18n }}</th>
                 <th scope="col">{{ "Action" | i18n }}</th>
             </tr>
@@ -85,15 +86,35 @@
             <td>{{ item.name }}</td>
             <td>{{ item.roleName }}</td>
             <td>
+                {% if item['2fa'] == 1 %}
+                    <span class="text-success">{{ "Enabled"|i18n }}</span>
+                {% elseif item['2fa'] == 2 %}
+                    <span class="text-primary">{{ "Enforce 2FA"|i18n }}</span>
+                {% else %}
+                    <span class="text-muted">{{ "Disabled"|i18n }}</span>
+                {% endif %}
+            </td>
+            <td>
                 <input type="checkbox" id="itemStatus[{{ item.id }}]" data-switch="success"
                        class="itemStatus" data-id="{{ item.id }}"{{ item.status == 1 ? " checked" : "" }}/>
                 <label for="itemStatus[{{ item.id }}]" data-on-label="" data-off-label=""></label>
             </td>
             <td>
                 <a href="{{ basePath }}/Admin/Manager/Edit?id={{ item.id }}"
-                   class="text-info mr-10"
+                   class="text-info mr-2"
                    data-toggle="tooltip" data-original-title="{{ "Edit" | i18n }}">{{ "Edit" | i18n }}
                 </a>
+                {% if item['2fa'] >=1 %}
+                    <a href="javascript:deactivate2FA({{ item.id }})"
+                       class="text-danger mr-2"
+                       data-toggle="tooltip" data-original-title="{{ "Deactivate 2FA" | i18n }}">{{ "Deactivate 2FA" | i18n }}
+                    </a>
+                {% elseif item['2fa'] == 0 %}
+                    <a href="javascript:enforce2FA({{ item.id }})"
+                       class="text-success mr-2"
+                       data-toggle="tooltip" data-original-title="{{ "Enforce 2FA" | i18n }}">{{ "Enforce 2FA" | i18n }}
+                    </a>
+                {% endif %}
             </td>
             {% endfor %}
             {% endblock %}
@@ -116,5 +137,29 @@
                     $(me).prop("checked", !status);
                 });
         });
+
+        function deactivate2FA(id) {
+            common.quest('warning', '{{ 'Confirm message'|i18n }}','{{ 'Are you sure want do this?'|i18n }}', function () {
+                common.showWait();
+                common.post('{{ basePath }}/Admin/Manager/Auth2FA', {id: id, status: 0},
+                    function () {
+                        common.reload();
+                    }, function () {
+                        common.hideWait();
+                    });
+            });
+        }
+
+        function enforce2FA(id) {
+            common.quest('normal', '{{ 'Confirm message'|i18n }}','{{ 'Are you sure want do this?'|i18n }}', function () {
+                common.showWait();
+                common.post('{{ basePath }}/Admin/Manager/Auth2FA', {id: id, status: 2},
+                    function () {
+                        common.reload();
+                    }, function () {
+                        common.hideWait();
+                    });
+            });
+        }
     </script>
 {% endblock %}

@@ -46,6 +46,10 @@ class Facebook extends Base
      * @throws DBQueryError
      * @throws InternalError
      * @throws InvalidLogin
+     * @throws LoaderError
+     * @throws ReflectionException
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     final public function login($code)
     {
@@ -54,6 +58,7 @@ class Facebook extends Base
         $adminId = $this->module->Model->OAuthConnect->getByParty('facebook', $oauthUser['id']);
         if (!$admin = $this->model->AdminManager->get($adminId))
             throw new InvalidLogin('Username/Password is wrong');
+        $this->auth->auth2FA($admin);
         return $this->auth->prepare($admin);
     }
 }

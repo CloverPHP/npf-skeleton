@@ -110,17 +110,6 @@
     Common.prototype.quest = function (type, title, content, onOk, onHide) {
         type = jQuery.inArray(type, ['info', 'warning', 'error', 'success']) >= 0 ? type : '';
         var id = common.genCode(16), position = 'mid-center';
-        switch (type) {
-            case 'error':
-                position = 'bottom-center';
-                break;
-            case 'warning':
-                position = 'top-center';
-                break;
-            case 'success':
-                position = 'bottom-right';
-                break;
-        }
         var option = {
             heading: title,
             text: content +

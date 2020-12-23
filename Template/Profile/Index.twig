@@ -20,14 +20,38 @@
                         <div class="list-group">
                             <div class="list-group-item list-group-item-action bb-1 bb-dashed border-light media-list-divided media-list-hover">
                                 <div class="d-flex align-items-center" data-toggle="modal" data-target="#profile-edit">
-                                    <p class="mb-0 col-3 col-md-2">{{ "Username" | i18n }} </p>
-                                    <p class="mb-0 col-9 col-md-10">{{ admin.user }}</p>
+                                    <div class="mb-0 col-3 col-md-2">{{ "Username" | i18n }} </div>
+                                    <h5 class="mb-0 col-9 col-md-10">{{ admin.user }}</h5>
                                 </div>
                             </div>
                             <div class="list-group-item list-group-item-action bb-1 bb-dashed border-light media-list-divided media-list-hover">
                                 <div class="d-flex align-items-center" data-toggle="modal" data-target="div#changeName">
-                                    <p class="mb-0 col-3 col-md-2">{{ "Name" | i18n }} </p>
-                                    <p class="mb-0 col-6 col-md-8">{{ admin.name }}</p>
+                                    <div class="mb-0 col-3 col-md-2">{{ "Name" | i18n }} </div>
+                                    <h5 class="mb-0 col-6 col-md-8">{{ admin.name }}</h5>
+                                </div>
+                            </div>
+                            <div class="list-group-item list-group-item-action bb-1 bb-dashed border-light media-list-divided media-list-hover">
+                                <div class="d-flex align-items-center align-top">
+                                    <div class="mb-0 col-3 col-md-2">{{ "Two-Factor Authentication" | i18n }} </div>
+                                    <div class="mb-0 col-6 col-md-8">
+                                        {% if admin['2fa'] == 1 %}
+                                            <span class="text-success">{{ "Enabled"|i18n }}</span>
+                                            (<a href="javascript:deActive2FA();" type="submit"
+                                                class="link text-danger">{{ 'Deactivate 2FA' | i18n }}</a>)
+                                        {% else %}
+                                            <h4>{{ "Set up via Third Party Authenticator"|i18n }}</h4>
+                                            <h6>
+                                                {{ "Please use your authentication app (such as Duo or Google Authenticator) to scan this QR code."|i18n }}
+                                            </h6>
+                                            <div id="qr2fa"></div>
+                                            <h5>{{ "Enter Confirmation Code"|i18n }}</h5>
+                                            <label for="code2fa">{{ "Please enter the confirmation code you see on your authentication app"|i18n }}</label>
+                                            <input type="text" class="form-control w-50" id="code2fa" name="code2fa"
+                                                   maxlength="6">
+                                            <button type="submit" class="btn btn-success mt-1"
+                                                    onclick="submitForm('active2FA')"> {{ 'Activate 2FA' | i18n }}</button>
+                                        {% endif %}
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -130,10 +154,39 @@
 {% endblock %}
 
 {% block script %}
+    <script crossorigin="anonymous" src="{{ assetsSource }}/js/vendor/jquery-qrcode.min.js"></script>
     <script>
+        {% if admin['2fa'] != 1 %}
+        $("div#qr2fa").empty().qrcode({
+            render: "image",
+            text: "otpauth://totp/" + encodeURIComponent('{{ title }}') + "?secret={{ admin.secret }}",
+            size: 200
+        });
+        {% endif %}
+
+        function deActive2FA() {
+            common.quest('normal', '{{ "Confirm message"|i18n }}',
+                '{{ "Confirm to deactivate Two-Factor Authentication"|i18n }}', function () {
+                    submitForm('deactivate2FA');
+                });
+        }
+
         function submitForm(action) {
             var submitData = {};
             switch (action) {
+                case 'active2FA':
+                    submitData = {
+                        "action": action,
+                        "code": $("input#code2fa").val()
+                    };
+                    break;
+
+                case 'deactivate2FA':
+                    submitData = {
+                        "action": action
+                    };
+                    break;
+
                 case 'name':
                     submitData = {
                         "action": action,

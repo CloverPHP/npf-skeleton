@@ -11,7 +11,7 @@
  Target Server Version : 50726
  File Encoding         : 65001
 
- Date: 17/12/2020 17:08:38
+ Date: 23/12/2020 12:52:32
 */
 
 SET NAMES utf8mb4;
@@ -44,6 +44,8 @@ CREATE TABLE `admin_manager`  (
   `admin_manager_name` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '',
   `admin_manager_type` varchar(5) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'sub',
   `admin_manager_roleid` bigint(20) NOT NULL DEFAULT 0,
+  `admin_manager_2fa` tinyint(1) UNSIGNED NOT NULL DEFAULT 0,
+  `admin_manager_secret` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `admin_manager_status` tinyint(1) UNSIGNED NOT NULL DEFAULT 0,
   `admin_manager_createby` bigint(20) UNSIGNED NOT NULL DEFAULT 0,
   `admin_manager_updateby` bigint(20) UNSIGNED NOT NULL DEFAULT 0,
@@ -57,7 +59,7 @@ CREATE TABLE `admin_manager`  (
 -- ----------------------------
 -- Records of admin_manager
 -- ----------------------------
-INSERT INTO `admin_manager` VALUES (1, 'admin', 'cd5ea73cd58f827fa78eef7197b8ee606c99b2e6', 'Administrator', 'main', 0, 1, 0, 0, '2020-12-17 16:46:10', '2020-10-30 00:45:51');
+INSERT INTO `admin_manager` VALUES (1, 'admin', 'cd5ea73cd58f827fa78eef7197b8ee606c99b2e6', 'Administrator', 'main', 0, 0, 'Z6YYK3E36VDFLDJSQVF6HVBMNZJ25SH2BCWRTSWB', 1, 0, 0, '2020-12-23 12:51:36', '2020-10-30 00:45:51');
 
 -- ----------------------------
 -- Table structure for admin_menu

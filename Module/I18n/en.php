@@ -42,15 +42,11 @@ final class en
             'Indian' => 'Indian',
             'Other' => 'Other',
             'Category' => 'Category',
-            'Book' => 'Book',
             'Title' => 'Title',
             'Remark' => 'Remark',
             'Identifier' => 'Identifier',
             'No Results Found' => 'No Results Found',
             'Member' => 'Member',
-            'Member Identifier' => 'Member Identifier',
-            'Book Identifier' => 'Book Identifier',
-            'Book/Member Identifier' => 'Book/Member Identifier',
             'Page' => 'Page',
             'of' => 'of',
             'Welcome' => 'Welcome',
@@ -67,6 +63,8 @@ final class en
             'Address' => 'Address',
             'Create Time' => 'Create Time',
             'Please select one' => 'Please select one',
+            'Enabled' => 'Enabled',
+            'Disabled' => 'Disabled',
 
             //Date Component
             'Year' => 'Year',
@@ -130,7 +128,8 @@ final class en
             'Success message' => 'Success message',
             'Confirm message' => 'Confirm message',
             'Table is clean' => 'Table is clean',
-            'Currently did not have any data.' => 'There is currently no data. ',
+            'Are you sure want do this?' => 'Are you sure want do this?',
+            'Currently did not have any data.' => 'There is currently no data.',
             'Page Not Found' => 'Page Not Found',
             'Permission Denied' => 'Permission Denied',
             'You are offline now' => 'You are offline now',
@@ -143,14 +142,15 @@ final class en
             'Please check back later.' => 'Please check back later.',
 
             //General Error Message
-            'user_exists' => 'Your email already exists, please choose another email. ',
-            'invalid_params' => 'Sorry, please fill in the complete information. ',
-            'invalid_login' => 'Incorrect username/password or invalid account, please try again. ',
+            'user_exists' => 'Your email already exists, please choose another email.',
+            'invalid_params' => 'Sorry, please fill in the complete information.',
+            'invalid_login' => 'Incorrect username/password or invalid account, please try again.',
             'unexpected_error' => 'Sorry, we encountered a problem, please try again later. ',
-            'internal_error' => 'Sorry, we encountered a internal error, please try again later. ',
-            'error_exception' => 'Sorry, we encountered a error, please try again later. ',
-            'db_query_error' => 'Sorry, we encountered a database issue, please try again later. ',
+            'internal_error' => 'Sorry, we encountered a internal error, please try again later.',
+            'error_exception' => 'Sorry, we encountered a error, please try again later.',
+            'db_query_error' => 'Sorry, we encountered a database issue, please try again later.',
             'image_not_supported' => 'Sorry, the image is not supported/broken, we only support jpg, png, bmp, gif.',
+            'auth_2step_factor'=>'Sorry, two-factor verify code is wrong, please try again.',
 
             //Admin Manager
             'Manager List' => 'Manager List',
@@ -207,6 +207,19 @@ final class en
             'Password' => 'Password',
             'Remember Me' => 'Remember Me',
             'Enter your user name and password to continue.' => 'Enter your user name and password to continue.',
+
+            //Two-Factor Authentication
+            'Two-Factor Authentication' => 'Two-Factor Authentication',
+            'Enter the code from the two-factor app on your mobile device. If you\'ve lost your device, you may need to contact administrator.' => 'Enter the code from the two-factor app on your mobile device. If you\'ve lost your device, you may need to contact administrator.',
+            'Two-factor authentication code' => 'Two-factor authentication code',
+            'Verify Code' => 'Verify Code',
+            'Enter Confirmation Code' => 'Enter Confirmation Code',
+            'Another Login' => 'Another Login',
+            'Activate 2FA' => 'Activate 2FA',
+            'Deactivate 2FA' => 'Deactivate 2FA',
+            'Enforce 2FA' => 'Enforce 2FA',
+            'Please enter the confirmation code you see on your authentication app' => 'Please enter the confirmation code you see on your authentication app',
+            'Please use your authentication app (such as Duo or Google Authenticator) to scan this QR code.' => 'Please use your authentication app (such as Duo or Google Authenticator) to scan this QR code.',
 
             //Menu
             'Home' => 'Home',

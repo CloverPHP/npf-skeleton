@@ -43,15 +43,11 @@ final class zhHans
             'Indian' => '印度文',
             'Other' => '其他',
             'Category' => '分类',
-            'Book' => '书本',
             'Title' => '标题',
             'Remark' => '备注',
             'Identifier' => '识别码',
             'No Results Found' => '找不到任何结果',
             'Member' => '会员',
-            'Member Identifier' => '会员识别码',
-            'Book Identifier' => '书本识别码',
-            'Book/Member Identifier' => '书本/会员 识别码',
             'Page' => '页面',
             'of' => '至',
             'Welcome' => '欢迎',
@@ -68,6 +64,8 @@ final class zhHans
             'Address' => '地址',
             'Create Time' => '建立時間',
             'Please select one' => '请选择一个',
+            'Enabled' => '已启用',
+            'Disabled' => '已停用',
 
             //Date Component
             'Year' => '年份',
@@ -131,12 +129,13 @@ final class zhHans
             'Success message' => '成功讯息',
             'Confirm message' => '确认讯息',
             'Table is clean' => '暂无数据',
+            'Are you sure want do this?' => '你确定要这样做吗？',
             'Currently did not have any data.' => '目前没有任何数据。',
             'Page Not Found' => '找不到网页',
             'Permission Denied' => '没有权限',
             'You are offline now' => '您现在离线',
             'Under Maintenance' => '正在维修！',
-            'Reload Page'=> '刷新页面',
+            'Reload Page' => '刷新页面',
             'It\'s looking like you may have taken a wrong turn. Don\'t worry... it happens to the best of us. Here\'s a little tip that might help you get back on track.' => '您好像走错了路。 别担心...这发生在我们当中。 这是一个小技巧，可以帮助您重回正轨。',
             'Ops, look like you have not permission.' => '抱歉，看来您没有权限。',
             'Why not try refreshing your page?' => '为什么不尝试刷新页面？',
@@ -152,6 +151,7 @@ final class zhHans
             'error_exception' => '抱歉，我们遇到了错误，请稍后重试。',
             'db_query_error' => '抱歉，我们遇到了资料库问题，请稍后重试。',
             'image_not_supported' => '抱歉，该图片不支持/损坏，我们仅支持jpg，png，bmp，gif。',
+            'auth_2step_factor' => '抱歉，双因素验证码错误，请重试。',
 
             //Admin Manager
             'Manager List' => '管理員列表',
@@ -208,6 +208,20 @@ final class zhHans
             'Password' => '密碼',
             'Remember Me' => '记得我',
             'Enter your user name and password to continue.' => '输入用戶名和密码以继续。',
+
+            //Two-Factor Authentication
+            'Two-Factor Authentication' => '双因素认证',
+            'Enter the code from the two-factor app on your mobile device. If you\'ve lost your device, you may need to contact administrator.' => '从移动设备上的双因素应用程序中输入代码。 如果您丢失了设备，则可能需要联系管理员。',
+            'Two-factor authentication code' => '双因素验证码',
+            'Verify Code' => '验证码',
+            'Enter Confirmation Code' => '输入确认码',
+            'Another Login' => '另一个登录',
+            'Activate 2FA' => '启用 2FA',
+            'Deactivate 2FA' => '停用 2FA',
+            'Enforce 2FA' => '強制 2FA',
+            'Please enter the confirmation code you see on your authentication app' => '请输入您在身份验证应用上看到的确认码',
+            'Please use your authentication app (such as Duo or Google Authenticator) to scan this QR code.' => '请使用您的身份验证应用（例如Duo或Google Authenticator）扫描此QR码。',
+
 
             //Menu
             'Home' => '主页',

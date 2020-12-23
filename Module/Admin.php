@@ -2,13 +2,14 @@
 
 namespace Module;
 
+use Exception\Auth2StepFactor;
 use Exception\CurrentPassInCorrect;
 use Exception\LoginRequired;
 use Exception\PermissionDenied;
 use Model\Loader;
 use Module\Admin\Auth;
-use Module\Admin\Menu;
 use Module\Admin\Manager;
+use Module\Admin\Menu;
 use Module\Admin\Role;
 use Npf\Core\App;
 use Npf\Exception\DBQueryError;
@@ -158,6 +159,39 @@ class Admin
     }
 
     /**
+     * Active 2 Step Factor Auth
+     * @param string $code
+     * @throws Auth2StepFactor
+     * @throws DBQueryError
+     * @throws InternalError
+     * @throws LoginRequired
+     */
+    final public function active2FA($code)
+    {
+        $admin = $this->getAdmin();
+        if (!$this->app->library->TwoFactorAuth->verifyCode($admin['secret'], $code))
+            throw new Auth2StepFactor();
+        $this->model->AdminManager->active2FA($admin['id']);
+        $admin['2fa'] = 1;
+        $this->app->session->set('admin', $admin);
+    }
+
+    /**
+     * Active 2 Step Factor Auth
+     * @throws DBQueryError
+     * @throws InternalError
+     * @throws LoginRequired
+     */
+    final public function deactivate2FA()
+    {
+        $admin = $this->getAdmin();
+        $admin['2fa'] = 0;
+        $admin['secret'] = $this->app->library->TwoFactorAuth->createSecret(40);
+        $this->model->AdminManager->deActive2FA($admin['secret'], $admin['id']);
+        $this->app->session->set('admin', $admin);
+    }
+
+    /**
      * Check Admin Action
      * @param $checkAction
      * @param string $errorRedirect
@@ -180,7 +214,7 @@ class Admin
         elseif (isset($this->admin['type']) && $this->admin['type'] === 'main')
             return;
 
-        $action = preg_replace('/^\/Admin/', '', str_replace("\\", "/", $this->app->request->getUri()));
+        $action = str_replace("\\", "/", $this->app->request->getUri());
         if (!in_array($action, $this->admin['role']['actions'], true)) {
             if ($this->app->request->isXHR())
                 throw new PermissionDenied('Permission Denied');

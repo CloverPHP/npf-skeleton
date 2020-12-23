@@ -1,0 +1,49 @@
+{% extends "Layout/Auth.twig" %}
+
+{% block title %}{{ title|default('Npf Project') }} - {{ "Two-Factor Authentication"|i18n }}{% endblock %}
+{% block content %}
+    <div class="text-center w-75 m-auto">
+        <h4 class="text-dark-50 text-center mt-0 font-weight-bold text-uppercase">{{ "Two-Factor Authentication"|i18n }}</h4>
+        <p class="text-muted mb-4">{{ "Set up via Third Party Authenticator"|i18n }}</p>
+    </div>
+
+    <form id="otp" action="/Auth/Force2FA" method="post" type="application/x-www-form-urlencoded">
+        <input type="hidden" name="action" value="activate2FA"/>
+        <div class="form-group">
+            {{ "Please use your authentication app (such as Duo or Google Authenticator) to scan this QR code."|i18n }}
+        </div>
+        <div class="form-group">
+            <div id="qr2fa" class="text-center"></div>
+        </div>
+        <div class="form-group">
+            <label for="code2fa"><span class="h5">{{ "Enter Confirmation Code"|i18n }}</span></label>
+            <input type="text" class="form-control" id="code" name="code"
+                   maxlength="6">
+            {{ "Please enter the confirmation code you see on your authentication app"|i18n }}
+        </div>
+
+        <div class="form-group mb-0 text-center">
+            <button type="submit" class="btn btn-success mt-1"> {{ 'Activate 2FA' | i18n }}</button>
+        </div>
+
+        <p class="mt-4 text-center">
+            <a href="/Auth/Login">{{ "Another Login"|i18n }}</a>
+        </p>
+
+    </form>
+{% endblock %}
+
+{% block script %}
+    <script crossorigin="anonymous" src="{{ assetsSource }}/js/vendor/jquery-qrcode.min.js"></script>
+    <script>
+        {% if loginAdmin['2fa'] != 1 %}
+        $(document).ready(function () {
+            $("div#qr2fa").empty().qrcode({
+                render: "image",
+                text: "otpauth://totp/" + encodeURIComponent('{{ title }}') + "?secret={{ loginAdmin.secret }}",
+                size: 200
+            });
+        });
+        {% endif %}
+    </script>
+{% endblock %}

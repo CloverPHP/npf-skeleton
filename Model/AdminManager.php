@@ -21,11 +21,12 @@ class AdminManager extends Model
      * @param $user
      * @param $pass
      * @param $name
+     * @param $secret
      * @param $createBy
      * @return bool|mysqli_result
      * @throws DBQueryError
      */
-    public function add($type, $roleId, $user, $pass, $name, $createBy)
+    public function add($type, $roleId, $user, $pass, $name, $secret, $createBy)
     {
         return $this->addOne([
             'type' => $type,
@@ -34,6 +35,8 @@ class AdminManager extends Model
             'name' => $name,
             'pass' => $pass,
             'status' => 1,
+            '2fa' => 0,
+            'secret' => $secret,
             'updateby' => $createBy,
             'createby' => $createBy,
             'updated' => Common::datetime(),
@@ -94,6 +97,46 @@ class AdminManager extends Model
      * @return bool|int|mysqli_result
      * @throws DBQueryError
      */
+    public function active2FA($id)
+    {
+        return $this->updateOneById([
+            '2fa' => 1,
+        ], $id);
+    }
+
+    /**
+     * @param $secret
+     * @param $id
+     * @return bool|int|mysqli_result
+     * @throws DBQueryError
+     */
+    public function deActive2FA($secret, $id)
+    {
+        return $this->updateOneById([
+            '2fa' => 0,
+            'secret' => $secret,
+        ], $id);
+    }
+
+    /**
+     * @param $secret
+     * @param $id
+     * @return bool|int|mysqli_result
+     * @throws DBQueryError
+     */
+    public function enforce2FA($secret, $id)
+    {
+        return $this->updateOneById([
+            '2fa' => 2,
+            'secret' => $secret,
+        ], $id);
+    }
+
+    /**
+     * @param $id
+     * @return bool|int|mysqli_result
+     * @throws DBQueryError
+     */
     public function active($id)
     {
         return $this->updateOneById(['status' => 1], $id);
@@ -116,7 +159,7 @@ class AdminManager extends Model
      */
     public function get($id)
     {
-        return $this->getOneById(['id', 'user', 'pass', 'name', 'type', 'roleid', 'status'], $id);
+        return $this->getOneById('*', $id);
     }
 
     /**
@@ -170,7 +213,7 @@ class AdminManager extends Model
         if (!empty($role))
             $cond["roleid"] = $role;
 
-        return $this->getAllByCond(['id', 'user', 'name', 'type', 'roleid', 'status'], null, $cond,
+        return $this->getAllByCond(['id', 'user', 'name', 'type', 'roleid', '2fa', 'status'], null, $cond,
             ['id' => 'DESC'],
             [$page * $pageSize, $pageSize]);
     }

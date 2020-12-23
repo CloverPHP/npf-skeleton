@@ -5,6 +5,7 @@ namespace Module\Admin;
 use Exception\LoginRequired;
 use Exception\ObjectMismatch;
 use Npf\Exception\DBQueryError;
+use Npf\Exception\InternalError;
 
 /**
  * Class Profile
@@ -19,6 +20,7 @@ class Manager extends Base
      * @param $name
      * @throws DBQueryError
      * @throws LoginRequired
+     * @throws InternalError
      */
     final public function add($role, $user, $pass, $name)
     {
@@ -26,7 +28,8 @@ class Manager extends Base
         if ((int)$role === 0)
             $type = 'main';
         $pass = sha1($user . $pass);
-        $this->model->AdminManager->add($type, $role, $user, sha1($user . $pass), $name, $this->admin->getAdminId());
+        $secret = $this->app->library->TwoFactorAuth->createSecret(40);
+        $this->model->AdminManager->add($type, $role, $user, sha1($user . $pass), $name, $secret, $this->admin->getAdminId());
     }
 
     /**
@@ -64,6 +67,28 @@ class Manager extends Base
             $this->model->AdminManager->active($id);
         else
             $this->model->AdminManager->deActive($id);
+    }
+
+    /**
+     * @param $status
+     * @param $id
+     * @throws DBQueryError
+     * @throws InternalError
+     */
+    final public function update2FA($status, $id)
+    {
+        $secret = $this->app->library->TwoFactorAuth->createSecret(40);
+        switch ((int)$status) {
+            case 0:
+                $this->model->AdminManager->deActive2FA($secret, $id);
+                break;
+            case 1:
+                $this->model->AdminManager->active2FA($id);
+                break;
+            case 2:
+                $this->model->AdminManager->enforce2FA($secret, $id);
+                break;
+        }
     }
 
     /**

@@ -69,6 +69,11 @@ abstract class Base
     private $view = '';
 
     /**
+     * @var string View Type
+     */
+    private $title = '';
+
+    /**
      * @var bool Admin Action Permission Checking
      */
     protected $checkAction = false;
@@ -96,49 +101,14 @@ abstract class Base
         $this->app = &$app;
         $this->module = &$module;
         $this->mediaDomain = $app->config('Misc')->get('cdnPath', '');
+        $this->title = 'Npf Project';
 
         $app->on('exception', function (App $app) {
-            $this->view = '';
-            $app->response->import($app->request->get('*'), true);
-            $error = $app->response->get('error', '');
-            $referer = $app->request->header('referer');
-            if (!empty($error)) {
-                switch ($error) {
-                    case 'login_required':
-                        $app->redirect("{$this->basePath}/");
-                        break;
-                    default:
-                        $app->response->set('errorMessage', $this->module->I18n->translation($app->response->get('error', '')));
-                }
-            }
-            if ($this->onErrorGoBack && $referer) {
-                $app->redirect($referer);
-            } elseif (!$app->request->isXHR()) {
-                $this->viewTwig();
-            } else
-                $this->viewJson();
+            $this->handleException($app);
         });
 
         $app->on('critical', function (App $app) {
-            $app->response->import($app->request->get('*'), true);
-            $error = $app->response->get('error', '');
-            if (!empty($error)) {
-                switch ($error) {
-                    case 'login_required':
-                        $app->redirect("{$this->basePath}/");
-                        break;
-                    default:
-                        $app->response->set('errorMessage', $this->module->I18n->translation($app->response->get('error', '')));
-                }
-            }
-            $referer = $app->request->header('referer');
-            $this->view = '';
-            if ($this->onErrorGoBack && $referer) {
-                $app->redirect($referer);
-            } elseif (!$app->request->isXHR()) {
-                $this->viewTwig();
-            } else
-                $this->viewJson();
+            $this->handleException($app);
         });
 
         $app->on('appEnd', function (App $app) {
@@ -163,6 +133,38 @@ abstract class Base
         //Permission Checking
         $module->Admin->verifyAction($this->checkAction, "{$this->basePath}/PermissionDenied");
         $module->Admin->verifyMenu($this->checkMenu, "{$this->basePath}/PermissionDenied");
+    }
+
+    /**
+     * @param App $app
+     * @throws DBQueryError
+     * @throws InternalError
+     * @throws LoaderError
+     * @throws ReflectionException
+     * @throws RuntimeError
+     * @throws SyntaxError
+     */
+    final public function handleException(App $app)
+    {
+        $this->view = '';
+        $app->response->import($app->request->get('*'), true);
+        $error = $app->response->get('error', '');
+        $referer = $app->request->header('referer');
+        if (!empty($error)) {
+            switch ($error) {
+                case 'login_required':
+                    $app->redirect("{$this->basePath}/");
+                    break;
+                default:
+                    $app->response->set('errorMessage', $this->module->I18n->translation($app->response->get('error', '')));
+            }
+        }
+        if ($this->onErrorGoBack && $referer) {
+            $app->redirect($referer);
+        } elseif (!$app->request->isXHR()) {
+            $this->viewJson();
+        } else
+            $this->viewJson();
     }
 
     /**
@@ -336,6 +338,7 @@ abstract class Base
         $this->app->response->set('assetsSource', "{$this->mediaDomain}/assets");
         $this->app->response->set('imageSource', "{$this->mediaDomain}/images");
         $this->app->response->set('mediaSource', "{$this->mediaDomain}");
+        $this->app->response->set('title', "{$this->title}");
         foreach ($responses as $name => $response)
             $this->app->response->set($name, $response);
     }
