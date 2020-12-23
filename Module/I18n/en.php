@@ -191,16 +191,6 @@ final class en
             'Please enter confirm password' => 'Please enter confirm password',
             'Update profile success' => 'Update profile success.',
 
-            //App Error Message
-            'name_exists' => 'Sorry, Name already exists, please try another word.',
-            'image_exists' => 'Image already uploaded to this folder.',
-            'identifier_exists' => 'Sorry, Identifier already exists, please try another word.',
-            'identifier_notfound' => 'Sorry, but identifier not exists.',
-            'current_password_incorrect' => 'Sorry, but your current password is incorrect.',
-            'mile_too_large' => 'Sorry, the mileage you entered is too large.',
-            'mile_too_less' => 'Sorry, the mileage you entered is less then previously record.',
-            'insufficient_stock' => 'Sorry, the product is out of stock.',
-
             //Sign in
             'Sign In' => 'Sign In',
             'User Name' => 'User Name',

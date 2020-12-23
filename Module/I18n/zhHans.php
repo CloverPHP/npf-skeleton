@@ -192,16 +192,6 @@ final class zhHans
             'Please enter confirm password' => '请输入确认密码',
             'Update profile success' => '更新个人资料成功。',
 
-            //App Error Message
-            'name_exists' => '抱歉，名称已经存在，请再输入一个用词。',
-            'image_exists' => '图片已上传到此文件夹。',
-            'identifier_exists' => '抱歉，识别码已存在，请使用另一个用词。',
-            'identifier_notfound' => '抱歉, 但是识别码不存在。',
-            'current_password_incorrect' => '抱歉，您当前的密码不正确。',
-            'mile_too_large' => '抱歉，您的输入的里程数太大。',
-            'mile_too_less' => '抱歉，您的输入的里程数之前的记录。',
-            'insufficient_stock' => '抱歉，该商品库存不足。',
-
             //Sign in
             'Sign In' => '登入',
             'User Name' => '用戶名',
@@ -221,7 +211,6 @@ final class zhHans
             'Enforce 2FA' => '強制 2FA',
             'Please enter the confirmation code you see on your authentication app' => '请输入您在身份验证应用上看到的确认码',
             'Please use your authentication app (such as Duo or Google Authenticator) to scan this QR code.' => '请使用您的身份验证应用（例如Duo或Google Authenticator）扫描此QR码。',
-
 
             //Menu
             'Home' => '主页',
