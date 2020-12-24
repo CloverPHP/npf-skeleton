@@ -1,7 +1,7 @@
 {% macro listMenu(item) %}
     <li{% if item.lists|length > 0 %} class="side-nav-item"{% endif %}>
         <a aria-expanded="false"
-           href="javascript: {% if item.lists|length > 0 and item.uri == '' %}void(0);{% else %}common.reload('{{ basePath }}{{ item.uri }}');{% endif %}" {% if item.level <= 1 %} class="side-nav-link"{% endif %}>
+           {% if item.lists|length > 0 and item.uri == '' %}href="javascript:void(0);"{% else %}{{ basePath }}href="{{ item.uri }}" onclick="common.showWait();"{% endif %} {% if item.level <= 1 %} class="side-nav-link"{% endif %}>
             {% if item.icon != '' %}
                 <i class="{{ item.icon }}"></i>
             {% endif %}
@@ -48,7 +48,7 @@
                     {% endif %}
                     <span>{{ item.name|i18n }}</span>
                 {% else %}
-                    <a href="{{ basePath ~ item.uri }}"
+                    <a href="{{ basePath ~ item.uri }}" onclick="common.showWait();"
                        class="side-nav-link">
                         {% if item.icon != '' %}
                             <i class="{{ item.icon }} mr-1"></i>

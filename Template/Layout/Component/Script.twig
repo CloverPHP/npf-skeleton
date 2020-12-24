@@ -252,7 +252,7 @@
 
     Common.prototype.openWindow = function (href, name) {
         if (name === undefined || name === '')
-            name = this.windowName;
+            name = '_blank';
         if (href)
             window.open(href, name, 'left=0,top=0,location=0,memubar=0,status=0,titlebar=0,toolbar=0');
     };
