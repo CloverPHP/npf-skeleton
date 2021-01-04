@@ -1,5 +1,5 @@
 <script>
-    var
+    let
         common = new Common(),
         openWindowName = 'jxlibrary_detail',
         openWindowOption = 'lefrt=0,top=0,location=0,memubar=0,status=0,titlebar=0,toolbar=0',
@@ -59,7 +59,7 @@
             navigator.serviceWorker.register('/service-worker.js');
 
         $('select').each(function () {
-            var width = $(this).data('width'),
+            let width = $(this).data('width'),
                 fontSize = $(this).css('font-size'),
                 lineHeight = Math.floor(parseInt(fontSize.replace('px', '')) * 1.5),
                 thumbBase = $(this).data('thumb-base'),
@@ -93,7 +93,6 @@
         });
 
         $('input.custom-file-input[type="file"]').on('change', function () {
-            //replace the original label
             $(this).next('.custom-file-label').html($(this).val().split('\\').pop()).addClass('text-primary font-weight-bolder');
         });
 
@@ -122,6 +121,5 @@
                     common.showWait();
             }
         });
-
     });
 </script>

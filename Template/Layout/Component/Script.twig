@@ -9,300 +9,294 @@
 <script crossorigin="anonymous" src="{{ mediaSource }}/js/search-filter-plugin.js"></script>
 
 <script>
-    function Common() {
-        this.toast = [];
+    class Common {
+
+        constructor() {
+            this.toast = [];
+        }
+
+        random(min, max) {
+            min = Math.ceil(min);
+            max = Math.floor(max);
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        };
+
+        genCode(length) {
+            let result = '',
+                characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789',
+                charactersLength = characters.length;
+            for (let i = 0; i < length; i++)
+                result += characters.charAt(Math.floor(Math.random() * charactersLength));
+            return result;
+        };
+
+        currencyFormat(amount, decimalCount, decimal, thousands) {
+            try {
+                if (typeof (decimalCount) === "undefined")
+                    decimalCount = 2;
+                if (typeof (decimal) === "undefined")
+                    decimalCount = '.';
+                if (typeof (thousands) === "undefined")
+                    thousands = ',';
+                decimalCount = Math.abs(decimalCount);
+                decimalCount = isNaN(decimalCount) ? 2 : decimalCount;
+                const negativeSign = amount < 0 ? "-" : "";
+                let i = parseInt(amount = Math.abs(Number(amount) || 0).toFixed(decimalCount)).toString(),
+                    j = (i.length > 3) ? i.length % 3 : 0;
+                return negativeSign + (j ? i.substr(0, j) + thousands : '') + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + thousands) + (decimalCount ? decimal + Math.abs(amount - i).toFixed(decimalCount).slice(2) : "");
+            } catch (e) {
+                return amount;
+            }
+        };
+
+        formPost(params, url) {
+            let key, method = "post", form = $('<form>');
+            form.attr("method", method)
+                .attr("enctype", 'application/x-www-form-urlencoded');
+            if (typeof (url) === 'string')
+                form.attr("action", url);
+            else
+                form.attr("action", window.location.protocol + "//" + window.location.host + window.location.pathname);
+
+            for (key in params)
+                if (params.hasOwnProperty(key)) {
+                    var field = $('<input>');
+                    field.attr("type", "hidden")
+                        .attr("name", key)
+                        .attr("value", params[key]);
+                    form.append(field);
+                }
+            $(document.body).append(form);
+            form.submit().remove();
+        };
+
+        notice(type, title, content, onHide) {
+            type = jQuery.inArray(type, ['info', 'warning', 'error', 'success']) >= 0 ? type : '';
+            let position = 'top-right';
+            switch (type) {
+                case 'error':
+                    position = 'bottom-center';
+                    break;
+                case 'warning':
+                    position = 'top-center';
+                    break;
+                case 'success':
+                    position = 'bottom-right';
+                    break;
+            }
+            let option = {
+                heading: title,
+                text: content,
+                showHideTransition: 'slide',
+                position: position,
+                hideAfter: 5000,
+                stack: 10
+            };
+            if (type !== '')
+                option['icon'] = type;
+            if (typeof (onHide) === 'function')
+                option['afterHide'] = onHide;
+            $.toast(option);
+        };
+
+        questHide(elem, type) {
+            let id = $(elem).data('id');
+            if (id !== '' && this.toast.hasOwnProperty(id)) {
+                this.toast[id].toast.reset();
+                if (this.toast[id].hasOwnProperty(type) && typeof (this.toast[id][type]) === 'function')
+                    this.toast[id][type]();
+                delete (this.toast[id]);
+            }
+        };
+
+        quest(type, title, content, onOk, onHide) {
+            type = jQuery.inArray(type, ['info', 'warning', 'error', 'success']) >= 0 ? type : '';
+            let id = common.genCode(16), position = 'mid-center',
+                option = {
+                    heading: title,
+                    text: content +
+                        '<div>&nbsp;</div>' +
+                        '<p>' +
+                        '<a href="#" class="mr-1" data-id="' + id + '" onclick="common.questHide(this, \'ok\');">{{ "Ok"|i18n }}</a>' +
+                        '<a href="#" class="ml-1" data-id="' + id + '" onclick="common.questHide(this, \'cancel\');"">{{ "Cancel"|i18n }}</a>' +
+                        '</p>',
+                    showHideTransition: 'slide',
+                    position: position,
+                    hideAfter: 30000,
+                    stack: false
+                };
+            if (type !== '')
+                option['icon'] = type;
+            if (typeof (onHide) === 'function')
+                option['afterHide'] = onHide;
+            this.toast[id] = {
+                toast: $.toast(option),
+                ok: onOk,
+                cancel: onHide
+            }
+        };
+
+        response(response, success, error, always, textStatus, request) {
+            let redirect, handleError, errorCb;
+            if (typeof request === 'object' && typeof request.getResponseHeader === 'function')
+                redirect = request.getResponseHeader('go');
+            if (redirect)
+                common.reload(redirect);
+            else {
+                if (typeof response !== 'object') {
+                    handleError = function (cb) {
+                        common.notice('error', "{{ "Error"|i18n }}", "{{ "We have encounter unexpected error, please try again later." }}", cb);
+                    };
+                    if (typeof (error) === 'function')
+                        errorCb = error(response);
+                    handleError.apply(this, [errorCb]);
+                } else {
+                    switch (response.error) {
+                        case '':
+                            if (response.status === 'ok') {
+                                var handleSuccess, successCb;
+                                handleSuccess = function (successCb) {
+                                    if (response.hasOwnProperty('successMessage') && response.successMessage !== '')
+                                        common.notice('success', "{{ "Success"|i18n }}", response.successMessage, successCb);
+                                    else if (response.hasOwnProperty('warningMessage') && response.warningMessage !== '')
+                                        common.notice('warning', "{{ "Warning"|i18n }}", response.warningMessage, successCb);
+                                    else if (response.hasOwnProperty('noticeMessage') && response.noticeMessage !== '')
+                                        common.notice('info', "{{ "Notice"|i18n }}", response.noticeMessage, successCb);
+                                    else if (typeof (successCb) === 'function')
+                                        successCb();
+                                };
+                                if (typeof (success) === 'function')
+                                    successCb = success(response);
+                                handleSuccess.apply(this, [successCb]);
+                            } else {
+                                common.notice('error', "{{ "Error"|i18n }}", "{{ "We have encounter unexpected error, please try again later." }}", function () {
+                                    error(response);
+                                });
+                            }
+                            break;
+                        case 'login_required':
+                            common.reload('{{ basePath }}/Auth/Login');
+                            break;
+                        default:
+                            handleError = function (cb) {
+                                if (response.hasOwnProperty('errorMessage') && response.errorMessage !== '')
+                                    common.notice('error', "{{ "Error"|i18n }}", response.errorMessage, cb);
+                            };
+                            if (typeof (error) === 'function')
+                                errorCb = error(response);
+                            if (typeof (handleError) === 'function')
+                                handleError.apply(this, [errorCb]);
+                    }
+                }
+                if (typeof (always) === 'function')
+                    always();
+            }
+        };
+
+        post(url, params, success, error, always) {
+            $.post(url, params,
+                function (response, textStatus, request) {
+                    common.response(response, success, error, always, textStatus, request);
+                }).fail(function () {
+                common.reload('/Offline');
+            });
+        };
+
+        showWait(element) {
+            element = typeof (element) === 'undefined' ? 'body' : element;
+            $(element).waitMe({
+                effect: 'stretch',
+                text: '',
+                bg: 'rgba(255, 255, 255, 0.7)',
+                color: 'rgba(0, 0, 0, 1)',
+                maxSize: '',
+                waitTime: -1,
+                textPos: 'vertical',
+                fontSize: '',
+                source: ''
+            });
+        };
+
+        hideWait(element) {
+            element = typeof (element) === 'undefined' ? 'body' : element;
+            $(element).waitMe("hide");
+        };
+
+        checkInput(pass, input, tip, type) {
+            let inputElm = $(input), tipElm = $(tip), test = false;
+            switch (type) {
+
+                case 'checkbox':
+                    test = !inputElm.is(':checked');
+                    break;
+
+                default:
+                    test = inputElm.val() === '';
+            }
+            if (test) {
+                tipElm.html('!');
+                if (pass)
+                    inputElm.focus();
+                pass = false;
+            } else
+                tipElm.html('');
+            return pass;
+        };
+
+        reload(href) {
+            let me = this;
+            me.showWait();
+            if (href)
+                location.href = href;
+            else
+                location.reload();
+        };
+
+        openWindow(href, name) {
+            if (name === undefined || name === '')
+                name = '_blank';
+            if (href)
+                window.open(href, name, 'left=0,top=0,location=0,memubar=0,status=0,titlebar=0,toolbar=0');
+        };
+
+        lang(lang) {
+            let me = this;
+            me.showWait();
+            me.post('{{ basePath }}/Index', {
+                lang: lang
+            }, function () {
+                me.reload();
+            }, function () {
+                me.hideWait();
+            });
+        };
+
+        logout() {
+            let me = this;
+            me.showWait();
+            me.post('{{ basePath }}/Auth/Logout', {}, function () {
+                me.reload();
+            }, function () {
+                me.hideWait();
+            });
+        };
     }
 
-    Common.prototype.random = function (min, max) {
-        min = Math.ceil(min);
-        max = Math.floor(max);
-        return Math.floor(Math.random() * (max - min + 1)) + min;
-    };
-
-    Common.prototype.genCode = function (length) {
-        var result = '',
-            characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789',
-            charactersLength = characters.length;
-        for (var i = 0; i < length; i++)
-            result += characters.charAt(Math.floor(Math.random() * charactersLength));
-        return result;
-    };
-
-    Common.prototype.currencyFormat = function (amount, decimalCount, decimal, thousands) {
-        try {
-            if (typeof (decimalCount) === "undefined")
-                decimalCount = 2;
-            if (typeof (decimal) === "undefined")
-                decimalCount = '.';
-            if (typeof (thousands) === "undefined")
-                thousands = ',';
-            decimalCount = Math.abs(decimalCount);
-            decimalCount = isNaN(decimalCount) ? 2 : decimalCount;
-            const negativeSign = amount < 0 ? "-" : "";
-            var i = parseInt(amount = Math.abs(Number(amount) || 0).toFixed(decimalCount)).toString();
-            var j = (i.length > 3) ? i.length % 3 : 0;
-            return negativeSign + (j ? i.substr(0, j) + thousands : '') + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + thousands) + (decimalCount ? decimal + Math.abs(amount - i).toFixed(decimalCount).slice(2) : "");
-        } catch (e) {
-            return amount;
-        }
-    };
-
-    Common.prototype.formPost = function (params, url) {
-        var key, method = "post", form = $('<form>');
-        form.attr("method", method)
-            .attr("enctype", 'application/x-www-form-urlencoded');
-        if (typeof (url) === 'string')
-            form.attr("action", url);
-        else
-            form.attr("action", window.location.protocol + "//" + window.location.host + window.location.pathname);
-
-        for (key in params)
-            if (params.hasOwnProperty(key)) {
-                var field = $('<input>');
-                field.attr("type", "hidden")
-                    .attr("name", key)
-                    .attr("value", params[key]);
-                form.append(field);
-            }
-        $(document.body).append(form);
-        form.submit().remove();
-    };
-
-    Common.prototype.notice = function (type, title, content, onHide) {
-        type = jQuery.inArray(type, ['info', 'warning', 'error', 'success']) >= 0 ? type : '';
-        var position = 'top-right';
-        switch (type) {
-            case 'error':
-                position = 'bottom-center';
-                break;
-            case 'warning':
-                position = 'top-center';
-                break;
-            case 'success':
-                position = 'bottom-right';
-                break;
-        }
-        var option = {
-            heading: title,
-            text: content,
-            showHideTransition: 'slide',
-            position: position,
-            hideAfter: 5000,
-            stack: 10
-        };
-        if (type !== '')
-            option['icon'] = type;
-        if (typeof (onHide) === 'function')
-            option['afterHide'] = onHide;
-        $.toast(option);
-    };
-
-    Common.prototype.questHide = function (elem, type) {
-        var id = $(elem).data('id');
-        if (id !== '' && this.toast.hasOwnProperty(id)) {
-            this.toast[id].toast.reset();
-            if (this.toast[id].hasOwnProperty(type) && typeof (this.toast[id][type]) === 'function')
-                this.toast[id][type]();
-            delete (this.toast[id]);
-        }
-    };
-
-    Common.prototype.quest = function (type, title, content, onOk, onHide) {
-        type = jQuery.inArray(type, ['info', 'warning', 'error', 'success']) >= 0 ? type : '';
-        var id = common.genCode(16), position = 'mid-center';
-        var option = {
-            heading: title,
-            text: content +
-                '<div>&nbsp;</div>' +
-                '<p>' +
-                '<a href="#" class="mr-1" data-id="' + id + '" onclick="common.questHide(this, \'ok\');">{{ "Ok"|i18n }}</a>' +
-                '<a href="#" class="ml-1" data-id="' + id + '" onclick="common.questHide(this, \'cancel\');"">{{ "Cancel"|i18n }}</a>' +
-                '</p>',
-            showHideTransition: 'slide',
-            position: position,
-            hideAfter: 30000,
-            stack: false
-        };
-        if (type !== '')
-            option['icon'] = type;
-        if (typeof (onHide) === 'function')
-            option['afterHide'] = onHide;
-        this.toast[id] = {
-            toast: $.toast(option),
-            ok: onOk,
-            cancel: onHide
-        }
-    };
-
-    Common.prototype.response = function (response, success, error, always, textStatus, request) {
-        var redirect, handleError, errorCb;
-        if (typeof request === 'object' && typeof request.getResponseHeader === 'function')
-            redirect = request.getResponseHeader('go');
-        if (redirect)
-            common.reload(redirect);
-        else {
-            if (typeof response !== 'object') {
-                handleError = function (cb) {
-                    common.notice('error', "{{ "Error"|i18n }}", "{{ "We have encounter unexpected error, please try again later." }}", cb);
-                };
-                if (typeof (error) === 'function')
-                    errorCb = error(response);
-                handleError.apply(this, [errorCb]);
-            } else {
-                switch (response.error) {
-                    case '':
-                        if (response.status === 'ok') {
-                            var handleSuccess, successCb;
-                            handleSuccess = function (successCb) {
-                                if (response.hasOwnProperty('successMessage') && response.successMessage !== '')
-                                    common.notice('success', "{{ "Success"|i18n }}", response.successMessage, successCb);
-                                else if (response.hasOwnProperty('warningMessage') && response.warningMessage !== '')
-                                    common.notice('warning', "{{ "Warning"|i18n }}", response.warningMessage, successCb);
-                                else if (response.hasOwnProperty('noticeMessage') && response.noticeMessage !== '')
-                                    common.notice('info', "{{ "Notice"|i18n }}", response.noticeMessage, successCb);
-                                else if (typeof (successCb) === 'function')
-                                    successCb();
-                            };
-                            if (typeof (success) === 'function')
-                                successCb = success(response);
-                            handleSuccess.apply(this, [successCb]);
-                        } else {
-                            common.notice('error', "{{ "Error"|i18n }}", "{{ "We have encounter unexpected error, please try again later." }}", function () {
-                                error(response);
-                            });
-                        }
-                        break;
-                    case 'login_required':
-                        common.reload('{{ basePath }}/Auth/Login');
-                        break;
-                    default:
-                        handleError = function (cb) {
-                            if (response.hasOwnProperty('errorMessage') && response.errorMessage !== '')
-                                common.notice('error', "{{ "Error"|i18n }}", response.errorMessage, cb);
-                        };
-                        if (typeof (error) === 'function')
-                            errorCb = error(response);
-                        if (typeof (handleError) === 'function')
-                            handleError.apply(this, [errorCb]);
-                }
-            }
-            if (typeof (always) === 'function')
-                always();
-        }
-    };
-
-    Common.prototype.post = function (url, params, success, error, always) {
-        $.post(url, params,
-            function (response, textStatus, request) {
-                common.response(response, success, error, always, textStatus, request);
-            }).fail(function () {
-            common.reload('/Offline');
-        });
-    };
-
-    Common.prototype.showWait = function (element) {
-        element = typeof (element) === 'undefined' ? 'body' : element;
-        $(element).waitMe({
-            effect: 'stretch',
-            text: '',
-            bg: 'rgba(255, 255, 255, 0.7)',
-            color: 'rgba(0, 0, 0, 1)',
-            maxSize: '',
-            waitTime: -1,
-            textPos: 'vertical',
-            fontSize: '',
-            source: ''
-        });
-    };
-
-    Common.prototype.hideWait = function (element) {
-        element = typeof (element) === 'undefined' ? 'body' : element;
-        $(element).waitMe("hide");
-    };
-
-    Common.prototype.checkInput = function (pass, input, tip, type) {
-        var inputElm = $(input), tipElm = $(tip), test = false;
-        switch (type) {
-
-            case 'checkbox':
-                test = !inputElm.is(':checked');
-                break;
-
-            default:
-                test = inputElm.val() === '';
-        }
-        if (test) {
-            tipElm.html('!');
-            if (pass)
-                inputElm.focus();
-            pass = false;
-        } else
-            tipElm.html('');
-        return pass;
-    };
-
-    Common.prototype.reload = function (href) {
-        var me = this;
-        me.showWait();
-        if (href)
-            location.href = href;
-        else
-            location.reload();
-    };
-
-    Common.prototype.openWindow = function (href, name) {
-        if (name === undefined || name === '')
-            name = '_blank';
-        if (href)
-            window.open(href, name, 'left=0,top=0,location=0,memubar=0,status=0,titlebar=0,toolbar=0');
-    };
-
-    Common.prototype.lang = function (lang) {
-        var me = this;
-        me.showWait();
-        me.post('{{ basePath }}/Index', {
-            lang: lang
-        }, function () {
-            me.reload();
-        }, function () {
-            me.hideWait();
-        });
-    };
-
-    Common.prototype.logout = function () {
-        var me = this;
-        me.showWait();
-        me.post('{{ basePath }}/Auth/Logout', {}, function () {
-            me.reload();
-        }, function () {
-            me.hideWait();
-        });
-    };
-
-    Common.prototype.reload = function (href) {
-        var me = this;
-        me.showWait();
-        if (href)
-            location.href = href;
-        else
-            location.reload();
-    };
-
-    window.addEventListener('beforeinstallprompt', function (e) {
+    window.addEventListener('beforeinstallprompt', (e) => {
         e.preventDefault();
-        // Stash the event so it can be triggered later.
-        var deferredPrompt = e;
-        $('li#add2Home').removeClass('d-none');
-        $('a#add2HomeBtn').click(function () {
-            // Show the prompt
-            deferredPrompt.prompt();
-            // Wait for the user to respond to the prompt
-            deferredPrompt.userChoice.then(function (choiceResult) {
-                if (choiceResult.outcome === 'accepted')
-                    $('li#add2Home').addClass('d-none');
-                deferredPrompt = null;
-            });
+    // Stash the event so it can be triggered later.
+    let deferredPrompt = e;
+    $('li#add2Home').removeClass('d-none');
+    $('a#add2HomeBtn').click(function () {
+        // Show the prompt
+        deferredPrompt.prompt();
+        // Wait for the user to respond to the prompt
+        deferredPrompt.userChoice.then(function (choiceResult) {
+            if (choiceResult.outcome === 'accepted')
+                $('li#add2Home').addClass('d-none');
+            deferredPrompt = null;
         });
+    });
     });
 </script>
 {% include 'Layout/Component/ReadyScript.twig' %}
