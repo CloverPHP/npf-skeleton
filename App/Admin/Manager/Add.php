@@ -55,8 +55,8 @@ final class Add extends Base
                 $module->Admin->Manager->add(
                     $app->request->get('roleid'),
                     $app->request->get('user'),
-                    $app->request->get('name'),
-                    $app->request->get('pass')
+                    $app->request->get('pass'),
+                    $app->request->get('name')
                 );
                 $this->app->redirect("{$this->basePath}/Admin/Manager/");
                 break;
