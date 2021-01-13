@@ -28,7 +28,7 @@ class Role extends Base
             $action = [];
         $action = json_encode($action);
         $menu = json_encode($menu);
-        $this->model->AdminRole->add($name, $desc, $menu, $this->admin->getAdminId(), $action);
+        $this->model->AdminRole->add($name, $desc, $menu, $action, $this->admin->getAdminId());
     }
 
     /**
