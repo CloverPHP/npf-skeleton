@@ -112,6 +112,8 @@ class Reporter
                 'IP' => Common::getClientIp(),
                 'Time' => Common::datetime(true),
             ];
+            if (!empty($arguments['title']))
+                $params['title'] = $arguments['title'];
         } else {
             $params['plain'] = 1;
             unset($params['header']);
