@@ -9,14 +9,14 @@
             {% endif %}
             {% block search %}{% endblock %}
         </form>
-        {% if lists %}
+        {% if lists or noEmpty == true %}
 
             {% include "Layout/Component/Pagination.twig" %}
 
-            <table class="table table-hover no-wrap" role="grid">
+            <table{% if id is not empty %} id="{{ id }}"{% endif %}  class="{{ class|default('table table-hover no-wrap') }}" role="grid">
 
                 <thead>
-                    {% block thead %}{% endblock %}
+                {% block thead %}{% endblock %}
                 </thead>
 
                 <tbody>
@@ -40,7 +40,9 @@
                             </div>
                         </div>
                         <div class="card-body">
-                            {% block noResultContent %} <p>{{ "Currently did not have any data."|i18n }}</p>{% endblock %}
+                            {% block noResultContent %}
+                                <p>{{ "Currently did not have any data."|i18n }}</p>
+                            {% endblock %}
                         </div>
                     </div>
                 </div>
