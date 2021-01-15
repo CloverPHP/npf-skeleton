@@ -29,6 +29,7 @@ final class en
             'Reset' => 'Reset',
             'Date' => 'Date',
             'Any' => 'Any',
+            'Detail' => 'Detail',
             'Status' => 'Status',
             'Action' => 'Action',
             'Add' => 'Add',
@@ -151,6 +152,11 @@ final class en
             'db_query_error' => 'Sorry, we encountered a database issue, please try again later.',
             'image_not_supported' => 'Sorry, the image is not supported/broken, we only support jpg, png, bmp, gif.',
             'auth_2step_factor'=>'Sorry, two-factor verify code is wrong, please try again.',
+            'name_exists' => 'Sorry, Name already exists, please try another word.',
+            'identifier_exists' => 'Sorry, Identifier already exists, please try another word.',
+            'identifier_notfound' => 'Sorry, but identifier not exists.',
+            'current_password_incorrect' => 'Sorry, but your current password is incorrect.',
+            'confirmpass_nomatch' => 'Your confirm password is not match with new password.',
 
             //Admin Manager
             'Manager List' => 'Manager List',

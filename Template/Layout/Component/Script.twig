@@ -93,9 +93,9 @@
                 stack: 10
             };
             if (type !== '')
-                option['icon'] = type;
+                option.icon = type;
             if (typeof (onHide) === 'function')
-                option['afterHide'] = onHide;
+                option.afterHidden = onHide;
             $.toast(option);
         };
 
@@ -126,9 +126,9 @@
                     stack: false
                 };
             if (type !== '')
-                option['icon'] = type;
+                option.icon = type;
             if (typeof (onHide) === 'function')
-                option['afterHide'] = onHide;
+                option.afterHidden = onHide;
             this.toast[id] = {
                 toast: $.toast(option),
                 ok: onOk,

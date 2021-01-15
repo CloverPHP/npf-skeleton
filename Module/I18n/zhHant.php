@@ -152,6 +152,11 @@ final class zhHant
             'db_query_error' => '抱歉，我們遇到了資料庫問題，請稍後重試。',
             'image_not_supported' => '抱歉，該圖片不支持/損壞，我們僅支持jpg，png，bmp，gif。',
             'auth_2step_factor'=>'抱歉，雙因素驗證碼錯誤，請重試。',
+            'name_exists' => '抱歉，名稱已經存在，請再輸入一個用詞。',
+            'identifier_exists' => '抱歉，識別碼已存在，請使用另一個用詞。',
+            'identifier_notfound' => '抱歉, 但是識別碼不存在。 ',
+            'current_password_incorrect' => '抱歉，您當前的密碼不正確。',
+            'confirmpass_nomatch'=>'您的確認密碼與新密碼不匹配。',
 
             //Admin Manager
             'Manager List' => '管理員列表',

@@ -152,6 +152,11 @@ final class zhHans
             'db_query_error' => '抱歉，我们遇到了资料库问题，请稍后重试。',
             'image_not_supported' => '抱歉，该图片不支持/损坏，我们仅支持jpg，png，bmp，gif。',
             'auth_2step_factor' => '抱歉，双因素验证码错误，请重试。',
+            'name_exists' => '抱歉，名称已经存在，请再输入一个用词。',
+            'identifier_exists' => '抱歉，识别码已存在，请使用另一个用词。',
+            'identifier_notfound' => '抱歉, 但是识别码不存在。',
+            'current_password_incorrect' => '抱歉，您当前的密码不正确。',
+            'confirmpass_nomatch'=>'您的确认密码与新密码不匹配。',
 
             //Admin Manager
             'Manager List' => '管理員列表',

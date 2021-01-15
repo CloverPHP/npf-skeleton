@@ -132,14 +132,17 @@ class Admin
      * @param $newPassword
      * @throws CurrentPassInCorrect
      * @throws DBQueryError
+     * @throws InternalError
      * @throws LoginRequired
      */
     final public function changePassword($oldPassword, $newPassword)
     {
-        $admin = $this->getAdminId();
-        if (isset($admin['password']) && $admin['password'] === sha1($admin['username'] . $oldPassword))
-            $this->module->Model->AdminManager->updatePassword(sha1($admin['username'] . $newPassword), $admin['id']);
-        else
+        $admin = $this->getAdmin();
+        if (isset($admin['pass']) && $admin['pass'] === sha1($admin['user'] . $oldPassword)) {
+            $admin['pass'] = sha1($admin['user'] . $newPassword);
+            $this->module->Model->AdminManager->updatePassword($admin['pass'], $admin['id']);
+            $this->app->session->set('admin', $admin);
+        }else
             throw new CurrentPassInCorrect('Your current password incorrect');
     }
 

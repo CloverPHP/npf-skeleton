@@ -172,7 +172,7 @@
         }
 
         function submitForm(action) {
-            var submitData = {};
+            let submitData = {}, modelId = '';
             switch (action) {
                 case 'active2FA':
                     submitData = {
@@ -192,6 +192,7 @@
                         "action": action,
                         "name": $("input#name").val()
                     };
+                    modelId = 'div#changeName';
                     break;
 
                 case 'password':
@@ -201,6 +202,7 @@
                         "newpsw": $("#inputNew").val(),
                         'cfmpsw': $("#inputConfirm").val()
                     };
+                    modelId = 'div#changePassword';
                     if (submitData.newpsw !== submitData.cfmpsw) {
                         $('input#inputOld').val('').focus();
                         $('input#inputConfirm').val('');
@@ -216,6 +218,8 @@
             common.post('{{ basePath }}/Profile/', submitData,
                 function () {
                     common.hideWait();
+                    if(modelId !== '')
+                        $(modelId).modal('hide');
                     common.notice('success', "{{ "Message"|i18n }}",
                         "{{ 'Update profile success' |i18n }}", function () {
                             common.reload();
